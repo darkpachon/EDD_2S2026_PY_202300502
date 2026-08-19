@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CinemaUSAC</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+
+      <widget class="QWidget" name="page_login">
+       <layout class="QVBoxLayout" name="verticalLayout_login">
+        <item>
+         <widget class="QLabel" name="lblTituloLogin">
+          <property name="text"><string>INICIAR SESIÓN</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
+          <property name="styleSheet"><string notr="true">font-size: 24px; font-weight: bold;</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txtUsuario">
+          <property name="placeholderText"><string>Usuario (admin o cliente)</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txtPassword">
+          <property name="echoMode"><enum>QLineEdit::Password</enum></property>
+          <property name="placeholderText"><string>Contraseña</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnIngresar">
+          <property name="text"><string>Ingresar</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblMensaje">
+          <property name="text"><string/></property>
+          <property name="styleSheet"><string notr="true">color: red; font-weight: bold;</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+      <widget class="QWidget" name="page_admin">
+       <layout class="QVBoxLayout" name="verticalLayout_admin">
+        <item>
+         <widget class="QLabel" name="lblTituloAdmin">
+          <property name="text"><string>Panel de Administrador</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
+          <property name="styleSheet"><string notr="true">font-size: 18px; font-weight: bold;</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTabWidget" name="tabAdmin">
+          <property name="currentIndex"><number>0</number></property>
+          
+          <widget class="QWidget" name="tab_Peliculas">
+           <attribute name="title"><string>1. Cartelera y Películas</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnCargarPeliculas"><property name="text"><string>Carga Masiva de Películas (CSV)</string></property></widget></item>
+            <item>
+             <widget class="QGroupBox" name="groupBoxPelicula">
+              <property name="title"><string>Registrar Película Manual</string></property>
+              <layout class="QFormLayout" name="formLayout">
+               <item row="0" column="0"><widget class="QLabel"><property name="text"><string>Código (Ej: P034)</string></property></widget></item>
+               <item row="0" column="1"><widget class="QLineEdit" name="txtCodigo"/></item>
+               <item row="1" column="0"><widget class="QLabel"><property name="text"><string>Título</string></property></widget></item>
+               <item row="1" column="1"><widget class="QLineEdit" name="txtTitulo"/></item>
+               <item row="2" column="0"><widget class="QLabel"><property name="text"><string>Género</string></property></widget></item>
+               <item row="2" column="1"><widget class="QLineEdit" name="txtGenero"/></item>
+               <item row="3" column="0"><widget class="QLabel"><property name="text"><string>Duración (min)</string></property></widget></item>
+               <item row="3" column="1"><widget class="QLineEdit" name="txtDuracion"/></item>
+               <item row="4" column="0"><widget class="QLabel"><property name="text"><string>Clasificación</string></property></widget></item>
+               <item row="4" column="1"><widget class="QLineEdit" name="txtClasificacion"/></item>
+               <item row="5" column="0"><widget class="QLabel"><property name="text"><string>Idioma</string></property></widget></item>
+               <item row="5" column="1"><widget class="QLineEdit" name="txtIdioma"/></item>
+               <item row="6" column="0"><widget class="QLabel"><property name="text"><string>Fecha Estreno</string></property></widget></item>
+               <item row="6" column="1"><widget class="QLineEdit" name="txtFechaEstreno"/></item>
+               <item row="7" column="0"><widget class="QLabel"><property name="text"><string>Fecha Fin</string></property></widget></item>
+               <item row="7" column="1"><widget class="QLineEdit" name="txtFechaFin"/></item>
+              </layout>
+             </widget>
+            </item>
+            <item><widget class="QPushButton" name="btnInsertarPelicula"><property name="text"><string>Guardar Película</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnGraficarArbol"><property name="text"><string>Generar Reporte (Graphviz)</string></property></widget></item>
+            <item><widget class="QLabel" name="lblMensajeAdmin"><property name="text"><string/></property><property name="styleSheet"><string notr="true">color: green; font-weight: bold;</string></property></widget></item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tab_Asientos">
+           <attribute name="title"><string>2. Funciones y Asientos</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnGestionarAsientos"><property name="text"><string>Gestionar Funciones y Mapa de Asientos</string></property></widget></item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tab_PromocionesAdmin">
+           <attribute name="title"><string>3. Promociones</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnGestionarPromociones"><property name="text"><string>Gestión de Promociones Especiales</string></property></widget></item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tab_SolicitudesAdmin">
+           <attribute name="title"><string>4. Solicitudes</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnGestionarSolicitudes"><property name="text"><string>Gestionar Solicitudes Especiales</string></property></widget></item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+      <widget class="QWidget" name="page_cliente">
+       <layout class="QVBoxLayout" name="verticalLayout_cliente">
+        <item>
+         <widget class="QLabel" name="lblTituloCliente">
+          <property name="text"><string>Panel de Cliente</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
+          <property name="styleSheet"><string notr="true">font-size: 18px; font-weight: bold;</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTabWidget" name="tabCliente">
+          <property name="currentIndex"><number>0</number></property>
+          
+          <widget class="QWidget" name="tab_Reservas">
+           <attribute name="title"><string>1. Cartelera y Reservas</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnVerCarteleraCliente"><property name="text"><string>Consultar Cartelera</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnReservarAsiento"><property name="text"><string>Realizar Reserva de Asiento</string></property></widget></item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tab_PromocionesCliente">
+           <attribute name="title"><string>2. Promociones</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnConsultarPromociones"><property name="text"><string>Consultar Promociones Activas</string></property></widget></item>
+           </layout>
+          </widget>
+
+          <widget class="QWidget" name="tab_SolicitudesCliente">
+           <attribute name="title"><string>3. Solicitudes Especiales</string></attribute>
+           <layout class="QVBoxLayout">
+            <item><widget class="QPushButton" name="btnRealizarSolicitud"><property name="text"><string>Realizar Solicitud Especial</string></property></widget></item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
