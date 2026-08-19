@@ -13,6 +13,8 @@ public:
     ListaDeListas();
     void insertarPromocion(Promocion nuevaPromo);
     void insertarBeneficio(int idPromocion, std::string beneficio);
+    void insertarBeneficio(int idPromocion, std::string tipo, std::string beneficio, std::string valor);
+    bool eliminarPromocion(int idPromocion);
     NodoListaListas* getPrimero();
 };
 

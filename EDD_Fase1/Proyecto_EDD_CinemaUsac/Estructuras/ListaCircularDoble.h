@@ -11,6 +11,8 @@ private:
 public:
     ListaCircularDoble();
     void insertar(Solicitud nuevaSolicitud);
+    bool eliminarPorNumero(int numero);
+    int contar();
     NodoListaDoble* getPrimero();
 };
 

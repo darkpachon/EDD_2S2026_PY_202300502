@@ -40,6 +40,7 @@ public:
     QWidget *page_admin;
     QVBoxLayout *verticalLayout_admin;
     QLabel *lblTituloAdmin;
+    QPushButton *btnCerrarSesionAdmin;
     QTabWidget *tabAdmin;
     QWidget *tab_Peliculas;
     QVBoxLayout *vboxLayout;
@@ -63,6 +64,8 @@ public:
     QLabel *label7;
     QLineEdit *txtFechaFin;
     QPushButton *btnInsertarPelicula;
+    QPushButton *btnEliminarPelicula;
+    QPushButton *btnVerCarteleraAdmin;
     QPushButton *btnGraficarArbol;
     QLabel *lblMensajeAdmin;
     QWidget *tab_Asientos;
@@ -77,17 +80,20 @@ public:
     QWidget *page_cliente;
     QVBoxLayout *verticalLayout_cliente;
     QLabel *lblTituloCliente;
+    QPushButton *btnCerrarSesionCliente;
     QTabWidget *tabCliente;
     QWidget *tab_Reservas;
     QVBoxLayout *vboxLayout4;
     QPushButton *btnVerCarteleraCliente;
     QPushButton *btnReservarAsiento;
+    QPushButton *btnCancelarReserva;
     QWidget *tab_PromocionesCliente;
     QVBoxLayout *vboxLayout5;
     QPushButton *btnConsultarPromociones;
     QWidget *tab_SolicitudesCliente;
     QVBoxLayout *vboxLayout6;
     QPushButton *btnRealizarSolicitud;
+    QPushButton *btnConsultarSolicitud;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -145,6 +151,11 @@ public:
         lblTituloAdmin->setStyleSheet(QString::fromUtf8("font-size: 18px; font-weight: bold;"));
 
         verticalLayout_admin->addWidget(lblTituloAdmin);
+
+        btnCerrarSesionAdmin = new QPushButton(page_admin);
+        btnCerrarSesionAdmin->setObjectName("btnCerrarSesionAdmin");
+
+        verticalLayout_admin->addWidget(btnCerrarSesionAdmin);
 
         tabAdmin = new QTabWidget(page_admin);
         tabAdmin->setObjectName("tabAdmin");
@@ -249,6 +260,16 @@ public:
 
         vboxLayout->addWidget(btnInsertarPelicula);
 
+        btnEliminarPelicula = new QPushButton(tab_Peliculas);
+        btnEliminarPelicula->setObjectName("btnEliminarPelicula");
+
+        vboxLayout->addWidget(btnEliminarPelicula);
+
+        btnVerCarteleraAdmin = new QPushButton(tab_Peliculas);
+        btnVerCarteleraAdmin->setObjectName("btnVerCarteleraAdmin");
+
+        vboxLayout->addWidget(btnVerCarteleraAdmin);
+
         btnGraficarArbol = new QPushButton(tab_Peliculas);
         btnGraficarArbol->setObjectName("btnGraficarArbol");
 
@@ -306,6 +327,11 @@ public:
 
         verticalLayout_cliente->addWidget(lblTituloCliente);
 
+        btnCerrarSesionCliente = new QPushButton(page_cliente);
+        btnCerrarSesionCliente->setObjectName("btnCerrarSesionCliente");
+
+        verticalLayout_cliente->addWidget(btnCerrarSesionCliente);
+
         tabCliente = new QTabWidget(page_cliente);
         tabCliente->setObjectName("tabCliente");
         tab_Reservas = new QWidget();
@@ -321,6 +347,11 @@ public:
         btnReservarAsiento->setObjectName("btnReservarAsiento");
 
         vboxLayout4->addWidget(btnReservarAsiento);
+
+        btnCancelarReserva = new QPushButton(tab_Reservas);
+        btnCancelarReserva->setObjectName("btnCancelarReserva");
+
+        vboxLayout4->addWidget(btnCancelarReserva);
 
         tabCliente->addTab(tab_Reservas, QString());
         tab_PromocionesCliente = new QWidget();
@@ -341,6 +372,11 @@ public:
         btnRealizarSolicitud->setObjectName("btnRealizarSolicitud");
 
         vboxLayout6->addWidget(btnRealizarSolicitud);
+
+        btnConsultarSolicitud = new QPushButton(tab_SolicitudesCliente);
+        btnConsultarSolicitud->setObjectName("btnConsultarSolicitud");
+
+        vboxLayout6->addWidget(btnConsultarSolicitud);
 
         tabCliente->addTab(tab_SolicitudesCliente, QString());
 
@@ -371,6 +407,7 @@ public:
         btnIngresar->setText(QCoreApplication::translate("MainWindow", "Ingresar", nullptr));
         lblMensaje->setText(QString());
         lblTituloAdmin->setText(QCoreApplication::translate("MainWindow", "Panel de Administrador", nullptr));
+        btnCerrarSesionAdmin->setText(QCoreApplication::translate("MainWindow", "Cerrar sesi\303\263n", nullptr));
         btnCargarPeliculas->setText(QCoreApplication::translate("MainWindow", "Carga Masiva de Pel\303\255culas (CSV)", nullptr));
         groupBoxPelicula->setTitle(QCoreApplication::translate("MainWindow", "Registrar Pel\303\255cula Manual", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "C\303\263digo (Ej: P034)", nullptr));
@@ -382,6 +419,8 @@ public:
         label6->setText(QCoreApplication::translate("MainWindow", "Fecha Estreno", nullptr));
         label7->setText(QCoreApplication::translate("MainWindow", "Fecha Fin", nullptr));
         btnInsertarPelicula->setText(QCoreApplication::translate("MainWindow", "Guardar Pel\303\255cula", nullptr));
+        btnEliminarPelicula->setText(QCoreApplication::translate("MainWindow", "Eliminar Pel\303\255cula", nullptr));
+        btnVerCarteleraAdmin->setText(QCoreApplication::translate("MainWindow", "Ver Cartelera Completa", nullptr));
         btnGraficarArbol->setText(QCoreApplication::translate("MainWindow", "Generar Reporte (Graphviz)", nullptr));
         lblMensajeAdmin->setText(QString());
         tabAdmin->setTabText(tabAdmin->indexOf(tab_Peliculas), QCoreApplication::translate("MainWindow", "1. Cartelera y Pel\303\255culas", nullptr));
@@ -392,12 +431,15 @@ public:
         btnGestionarSolicitudes->setText(QCoreApplication::translate("MainWindow", "Gestionar Solicitudes Especiales", nullptr));
         tabAdmin->setTabText(tabAdmin->indexOf(tab_SolicitudesAdmin), QCoreApplication::translate("MainWindow", "4. Solicitudes", nullptr));
         lblTituloCliente->setText(QCoreApplication::translate("MainWindow", "Panel de Cliente", nullptr));
+        btnCerrarSesionCliente->setText(QCoreApplication::translate("MainWindow", "Cerrar sesi\303\263n", nullptr));
         btnVerCarteleraCliente->setText(QCoreApplication::translate("MainWindow", "Consultar Cartelera", nullptr));
         btnReservarAsiento->setText(QCoreApplication::translate("MainWindow", "Realizar Reserva de Asiento", nullptr));
+        btnCancelarReserva->setText(QCoreApplication::translate("MainWindow", "Cancelar Reserva", nullptr));
         tabCliente->setTabText(tabCliente->indexOf(tab_Reservas), QCoreApplication::translate("MainWindow", "1. Cartelera y Reservas", nullptr));
         btnConsultarPromociones->setText(QCoreApplication::translate("MainWindow", "Consultar Promociones Activas", nullptr));
         tabCliente->setTabText(tabCliente->indexOf(tab_PromocionesCliente), QCoreApplication::translate("MainWindow", "2. Promociones", nullptr));
         btnRealizarSolicitud->setText(QCoreApplication::translate("MainWindow", "Realizar Solicitud Especial", nullptr));
+        btnConsultarSolicitud->setText(QCoreApplication::translate("MainWindow", "Consultar Estado de Solicitud", nullptr));
         tabCliente->setTabText(tabCliente->indexOf(tab_SolicitudesCliente), QCoreApplication::translate("MainWindow", "3. Solicitudes Especiales", nullptr));
     } // retranslateUi
 

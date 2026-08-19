@@ -65,6 +65,7 @@
           <property name="styleSheet"><string notr="true">font-size: 18px; font-weight: bold;</string></property>
          </widget>
         </item>
+        <item><widget class="QPushButton" name="btnCerrarSesionAdmin"><property name="text"><string>Cerrar sesión</string></property></widget></item>
         <item>
          <widget class="QTabWidget" name="tabAdmin">
           <property name="currentIndex"><number>0</number></property>
@@ -97,6 +98,8 @@
              </widget>
             </item>
             <item><widget class="QPushButton" name="btnInsertarPelicula"><property name="text"><string>Guardar Película</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnEliminarPelicula"><property name="text"><string>Eliminar Película</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnVerCarteleraAdmin"><property name="text"><string>Ver Cartelera Completa</string></property></widget></item>
             <item><widget class="QPushButton" name="btnGraficarArbol"><property name="text"><string>Generar Reporte (Graphviz)</string></property></widget></item>
             <item><widget class="QLabel" name="lblMensajeAdmin"><property name="text"><string/></property><property name="styleSheet"><string notr="true">color: green; font-weight: bold;</string></property></widget></item>
            </layout>
@@ -136,6 +139,7 @@
           <property name="styleSheet"><string notr="true">font-size: 18px; font-weight: bold;</string></property>
          </widget>
         </item>
+        <item><widget class="QPushButton" name="btnCerrarSesionCliente"><property name="text"><string>Cerrar sesión</string></property></widget></item>
         <item>
          <widget class="QTabWidget" name="tabCliente">
           <property name="currentIndex"><number>0</number></property>
@@ -145,6 +149,7 @@
            <layout class="QVBoxLayout">
             <item><widget class="QPushButton" name="btnVerCarteleraCliente"><property name="text"><string>Consultar Cartelera</string></property></widget></item>
             <item><widget class="QPushButton" name="btnReservarAsiento"><property name="text"><string>Realizar Reserva de Asiento</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnCancelarReserva"><property name="text"><string>Cancelar Reserva</string></property></widget></item>
            </layout>
           </widget>
 
@@ -159,6 +164,7 @@
            <attribute name="title"><string>3. Solicitudes Especiales</string></attribute>
            <layout class="QVBoxLayout">
             <item><widget class="QPushButton" name="btnRealizarSolicitud"><property name="text"><string>Realizar Solicitud Especial</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnConsultarSolicitud"><property name="text"><string>Consultar Estado de Solicitud</string></property></widget></item>
            </layout>
           </widget>
          </widget>

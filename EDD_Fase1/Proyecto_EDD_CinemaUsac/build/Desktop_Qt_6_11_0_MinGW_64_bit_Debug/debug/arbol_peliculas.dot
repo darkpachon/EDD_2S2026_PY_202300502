@@ -1,0 +1,33 @@
+digraph G {
+node [shape=record, style=filled, fillcolor=lightcyan, fontname="Arial"];
+edge [color=darkblue];
+Nodo34 [label="Código: P034\nTítulo: Inception\nGénero: Ciencia Ficción\nDuración: 148 min\nClasificación: C\nIdioma: Subtitulada\nEstreno: 2026-01-20\nFin: 2026-03-20"];
+Nodo34 -> Nodo12;
+Nodo12 [label="Código: P012\nTítulo: The Dark Knight\nGénero: Acción\nDuración: 152 min\nClasificación: B15\nIdioma: Subtitulada\nEstreno: 2026-02-05\nFin: 2026-04-05"];
+Nodo12 -> Nodo8;
+Nodo8 [label="Código: P008\nTítulo: Toy Story\nGénero: Animación\nDuración: 81 min\nClasificación: A\nIdioma: Doblada\nEstreno: 2026-02-01\nFin: 2026-04-01"];
+Nodo8 -> Nodo3;
+Nodo3 [label="Código: P003\nTítulo: Avengers: Endgame\nGénero: Acción\nDuración: 181 min\nClasificación: B15\nIdioma: Subtitulada\nEstreno: 2026-03-05\nFin: 2026-05-05"];
+Nodo12 -> Nodo21;
+Nodo21 [label="Código: P021\nTítulo: The Lion King\nGénero: Animación\nDuración: 88 min\nClasificación: A\nIdioma: Doblada\nEstreno: 2026-01-10\nFin: 2026-03-10"];
+Nodo21 -> Nodo19;
+Nodo19 [label="Código: P019\nTítulo: The Godfather\nGénero: Drama\nDuración: 175 min\nClasificación: C\nIdioma: Subtitulada\nEstreno: 2026-01-18\nFin: 2026-03-18"];
+Nodo19 -> Nodo14;
+Nodo14 [label="Código: P014\nTítulo: Shrek\nGénero: Comedia\nDuración: 90 min\nClasificación: A\nIdioma: Doblada\nEstreno: 2026-02-10\nFin: 2026-04-10"];
+Nodo21 -> Nodo27;
+Nodo27 [label="Código: P027\nTítulo: Spider-Man: No Way Home\nGénero: Acción\nDuración: 148 min\nClasificación: B15\nIdioma: Subtitulada\nEstreno: 2026-02-25\nFin: 2026-04-25"];
+Nodo34 -> Nodo89;
+Nodo89 [label="Código: P089\nTítulo: Forrest Gump\nGénero: Drama\nDuración: 142 min\nClasificación: A\nIdioma: Español\nEstreno: 2026-03-01\nFin: 2026-05-01"];
+Nodo89 -> Nodo56;
+Nodo56 [label="Código: P056\nTítulo: Jurassic Park\nGénero: Aventura\nDuración: 127 min\nClasificación: B15\nIdioma: Subtitulada\nEstreno: 2026-02-15\nFin: 2026-04-15"];
+Nodo56 -> Nodo45;
+Nodo45 [label="Código: P045\nTítulo: Gladiator\nGénero: Acción\nDuración: 155 min\nClasificación: C\nIdioma: Subtitulada\nEstreno: 2026-03-10\nFin: 2026-05-10"];
+Nodo56 -> Nodo73;
+Nodo73 [label="Código: P073\nTítulo: The Matrix\nGénero: Ciencia Ficción\nDuración: 136 min\nClasificación: C\nIdioma: Subtitulada\nEstreno: 2026-01-25\nFin: 2026-03-25"];
+Nodo73 -> Nodo67;
+Nodo67 [label="Código: P067\nTítulo: Finding Nemo\nGénero: Animación\nDuración: 100 min\nClasificación: A\nIdioma: Doblada\nEstreno: 2026-02-20\nFin: 2026-04-20"];
+Nodo67 -> Nodo61;
+Nodo61 [label="Código: P061\nTítulo: The Shawshank Redemption\nGénero: Drama\nDuración: 142 min\nClasificación: C\nIdioma: Subtitulada\nEstreno: 2026-03-15\nFin: 2026-05-15"];
+Nodo73 -> Nodo78;
+Nodo78 [label="Código: P078\nTítulo: Interstellar\nGénero: Ciencia Ficción\nDuración: 169 min\nClasificación: C\nIdioma: Subtitulada\nEstreno: 2026-01-30\nFin: 2026-03-30"];
+}

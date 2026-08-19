@@ -10,8 +10,12 @@ using namespace std;
 class NodoBeneficio {
 public:
     string beneficio;
+    string tipo;
+    string valor;
     NodoBeneficio* siguiente;
-    NodoBeneficio(string _beneficio) : beneficio(_beneficio), siguiente(nullptr) {}
+    NodoBeneficio* anterior;
+    NodoBeneficio(string _beneficio, string _tipo = "", string _valor = "")
+        : beneficio(_beneficio), tipo(_tipo), valor(_valor), siguiente(nullptr), anterior(nullptr) {}
 };
 
 // Nodo para la lista principal (Promociones)

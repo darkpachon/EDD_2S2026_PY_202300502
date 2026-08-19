@@ -20,20 +20,59 @@ void ListaDeListas::insertarPromocion(Promocion nuevaPromo) {
 }
 
 void ListaDeListas::insertarBeneficio(int idPromocion, string beneficio) {
+    insertarBeneficio(idPromocion, "", beneficio, "");
+}
+
+void ListaDeListas::insertarBeneficio(int idPromocion, string tipo, string beneficio, string valor) {
     if (primero == nullptr) return;
     
     NodoListaListas* actual = primero;
     do {
         if (actual->promocion.id == idPromocion) {
-            NodoBeneficio* nuevoBen = new NodoBeneficio(beneficio);
+            NodoBeneficio* nuevoBen = new NodoBeneficio(beneficio, tipo, valor);
             
-            // Inserción al inicio de la sub-lista para ser más eficientes
-            nuevoBen->siguiente = actual->listaBeneficios;
-            actual->listaBeneficios = nuevoBen;
+            if (actual->listaBeneficios == nullptr) {
+                actual->listaBeneficios = nuevoBen;
+            } else {
+                NodoBeneficio* ultimoBeneficio = actual->listaBeneficios;
+                while (ultimoBeneficio->siguiente != nullptr) ultimoBeneficio = ultimoBeneficio->siguiente;
+                ultimoBeneficio->siguiente = nuevoBen;
+                nuevoBen->anterior = ultimoBeneficio;
+            }
             return;
         }
         actual = actual->siguiente;
     } while (actual != primero);
+}
+
+bool ListaDeListas::eliminarPromocion(int idPromocion) {
+    if (primero == nullptr) return false;
+
+    NodoListaListas* actual = primero;
+    do {
+        if (actual->promocion.id == idPromocion) {
+            if (actual == primero && actual == ultimo) {
+                primero = nullptr;
+                ultimo = nullptr;
+            } else {
+                NodoListaListas* anterior = ultimo;
+                while (anterior->siguiente != actual) anterior = anterior->siguiente;
+                anterior->siguiente = actual->siguiente;
+                if (actual == primero) primero = actual->siguiente;
+                if (actual == ultimo) ultimo = anterior;
+            }
+            NodoBeneficio* beneficio = actual->listaBeneficios;
+            while (beneficio != nullptr) {
+                NodoBeneficio* siguiente = beneficio->siguiente;
+                delete beneficio;
+                beneficio = siguiente;
+            }
+            delete actual;
+            return true;
+        }
+        actual = actual->siguiente;
+    } while (actual != primero);
+    return false;
 }
 
 NodoListaListas* ListaDeListas::getPrimero() {

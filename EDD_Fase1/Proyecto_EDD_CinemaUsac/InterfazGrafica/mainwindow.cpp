@@ -7,8 +7,26 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QStringList>
+#include <QDate>
+#include <QDesktopServices>
+#include <QDir>
+#include <QFileInfo>
+#include <QUrl>
 #include <fstream>
 #include <sstream>
+
+namespace {
+void abrirReporte(MainWindow* ventana, const QString& nombreArchivo) {
+    QString ruta = QDir::current().filePath("reportes_generados/" + nombreArchivo);
+    QFileInfo archivo(ruta);
+    if (archivo.exists()) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(archivo.absoluteFilePath()));
+        QMessageBox::information(ventana, "Reporte generado", "El reporte se guardó en:\n" + archivo.absoluteFilePath());
+    } else {
+        QMessageBox::warning(ventana, "Graphviz", "No se encontró el PNG. Verifique que Graphviz esté instalado y que dot esté en el PATH.");
+    }
+}
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     matriz = new MatrizAsientos();
     listaSolicitudes = new ListaCircularDoble();
     listaPromociones = new ListaDeListas();
+    siguienteNumeroSolicitud = 1;
 }
 
 MainWindow::~MainWindow() {
@@ -54,6 +73,20 @@ void MainWindow::on_btnIngresar_clicked() {
     else {
         ui->lblMensaje->setText("Usuario o contraseña incorrectos");
     }
+}
+
+void MainWindow::on_btnCerrarSesionAdmin_clicked() {
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->txtUsuario->clear();
+    ui->txtPassword->clear();
+    ui->lblMensaje->clear();
+}
+
+void MainWindow::on_btnCerrarSesionCliente_clicked() {
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->txtUsuario->clear();
+    ui->txtPassword->clear();
+    ui->lblMensaje->clear();
 }
 
 // --- LÓGICA DE CARGA MASIVA CSV DE PELÍCULAS ---
@@ -149,12 +182,66 @@ void MainWindow::on_btnInsertarPelicula_clicked() {
     }
 }
 
+void MainWindow::on_btnEliminarPelicula_clicked() {
+    bool ok;
+    QString codigo = QInputDialog::getText(this, "Eliminar película", "Código de película (Ej. P034):", QLineEdit::Normal, "", &ok);
+    if (!ok || codigo.trimmed().isEmpty()) return;
+
+    std::string codigoTexto = codigo.toStdString();
+    if (codigoTexto.size() > 1 && (codigoTexto[0] == 'P' || codigoTexto[0] == 'p')) codigoTexto.erase(0, 1);
+
+    int codigoNumerico;
+    try {
+        codigoNumerico = std::stoi(codigoTexto);
+    } catch (...) {
+        QMessageBox::warning(this, "Código inválido", "Ingrese un código como P034.");
+        return;
+    }
+
+    if (arbol->buscar(codigoNumerico) == nullptr) {
+        QMessageBox::warning(this, "No encontrada", "La película no existe en la cartelera.");
+        return;
+    }
+    arbol->eliminar(codigoNumerico);
+    ui->lblMensajeAdmin->setText("Película eliminada correctamente.");
+}
+
+void MainWindow::agregarPeliculasCartelera(NodoArbol* nodo, QStringList& peliculas) {
+    if (nodo == nullptr) return;
+    agregarPeliculasCartelera(nodo->izquierdo, peliculas);
+    QDate hoy = QDate::currentDate();
+    QDate estreno = QDate::fromString(QString::fromStdString(nodo->pelicula.fecha_estreno), "yyyy-MM-dd");
+    QDate fin = QDate::fromString(QString::fromStdString(nodo->pelicula.fecha_fin), "yyyy-MM-dd");
+    QString estado = "En cartelera";
+    if (hoy < estreno) estado = "Proximo estreno";
+    else if (hoy > fin) estado = "Fuera de cartelera";
+    else if (hoy.daysTo(fin) < 7) estado = "Proximo a retirar";
+    peliculas << QString("%1 | %2 | %3 | %4 min | %5 | %6 | %7 a %8 | %9")
+        .arg(QString::fromStdString(nodo->pelicula.codigoOriginal))
+        .arg(QString::fromStdString(nodo->pelicula.titulo))
+        .arg(QString::fromStdString(nodo->pelicula.genero))
+        .arg(nodo->pelicula.duracion)
+        .arg(QString::fromStdString(nodo->pelicula.clasificacion))
+        .arg(QString::fromStdString(nodo->pelicula.idioma))
+        .arg(QString::fromStdString(nodo->pelicula.fecha_estreno))
+        .arg(QString::fromStdString(nodo->pelicula.fecha_fin))
+        .arg(estado);
+    agregarPeliculasCartelera(nodo->derecho, peliculas);
+}
+
+void MainWindow::on_btnVerCarteleraAdmin_clicked() {
+    QStringList peliculas;
+    agregarPeliculasCartelera(arbol->getRaiz(), peliculas);
+    QMessageBox::information(this, "Cartelera completa", peliculas.isEmpty() ? "No hay peliculas registradas." : peliculas.join("\n"));
+}
+
 // --- GENERAR REPORTE DEL ÁRBOL ---
 void MainWindow::on_btnGraficarArbol_clicked() {
     std::string rutaImagen = "reporte_arbol.png";
 
     GeneradorDot generador;
     generador.graficarArbol(arbol, rutaImagen);
+    abrirReporte(this, QString::fromStdString(rutaImagen));
 
     QLabel* lblImg = findChild<QLabel*>("lblImagen");
     if (lblImg) {
@@ -169,8 +256,10 @@ void MainWindow::on_btnGraficarArbol_clicked() {
 // --- GESTIÓN DE ASIENTOS (ADMIN) ---
 void MainWindow::on_btnGestionarAsientos_clicked() {
     QStringList opciones;
-    opciones << "1. Reservar Asiento (Manual)" 
-             << "2. Generar Reporte de Matriz (Graphviz)";
+    opciones << "1. Configurar función"
+             << "2. Reservar asiento"
+             << "3. Liberar asiento"
+             << "4. Generar reporte de matriz";
              
     bool ok;
     QString seleccion = QInputDialog::getItem(this, "Gestión de Asientos", 
@@ -178,11 +267,49 @@ void MainWindow::on_btnGestionarAsientos_clicked() {
     if (!ok) return;
 
     if (seleccion == opciones[0]) {
-        on_btnReservarAsiento_clicked();
+        int filas = QInputDialog::getInt(this, "Configurar función", "Número de filas:", 10, 1, 100, 1, &ok);
+        if (!ok) return;
+        int columnas = QInputDialog::getInt(this, "Configurar función", "Asientos por fila:", 20, 1, 100, 1, &ok);
+        if (!ok) return;
+        QString codigo = QInputDialog::getText(this, "Configurar función", "Código de película:", QLineEdit::Normal, "P001", &ok);
+        if (!ok) return;
+        std::string codigoTexto = codigo.toStdString();
+        if (codigoTexto.size() > 1 && (codigoTexto[0] == 'P' || codigoTexto[0] == 'p')) codigoTexto.erase(0, 1);
+        int codigoNumerico;
+        try {
+            codigoNumerico = std::stoi(codigoTexto);
+        } catch (...) {
+            QMessageBox::warning(this, "Código inválido", "Ingrese un código válido.");
+            return;
+        }
+        Pelicula* pelicula = arbol->buscar(codigoNumerico);
+        if (pelicula == nullptr) {
+            QMessageBox::warning(this, "Película no encontrada", "Registre la película antes de crear la función.");
+            return;
+        }
+        QString horario = QInputDialog::getText(this, "Configurar función", "Horario (HH:MM):", QLineEdit::Normal, "17:00", &ok);
+        if (!ok) return;
+        QString sala = QInputDialog::getText(this, "Configurar función", "Sala:", QLineEdit::Normal, "Sala 1", &ok);
+        if (!ok) return;
+        matriz->configurar(filas, columnas);
+        matriz->configurarFuncion(pelicula->titulo, horario.toStdString(), sala.toStdString());
+        QMessageBox::information(this, "Función configurada", "La función fue creada y la matriz anterior fue reemplazada.");
     } else if (seleccion == opciones[1]) {
+        on_btnReservarAsiento_clicked();
+    } else if (seleccion == opciones[2]) {
+        int fila = QInputDialog::getInt(this, "Liberar asiento", "Número de fila:", 1, 1, 100, 1, &ok);
+        if (!ok) return;
+        int columna = QInputDialog::getInt(this, "Liberar asiento", "Número de asiento:", 1, 1, 100, 1, &ok);
+        if (!ok) return;
+        if (matriz->eliminarAsiento(fila, columna)) {
+            QMessageBox::information(this, "Asiento liberado", "El asiento volvió a estar disponible.");
+        } else {
+            QMessageBox::warning(this, "No encontrado", "Ese asiento no está reservado.");
+        }
+    } else if (seleccion == opciones[3]) {
         GeneradorDot generador;
         generador.graficarMatriz(matriz, "reporte_matriz.png");
-        QMessageBox::information(this, "Éxito", "Reporte de la Matriz generado como 'reporte_matriz.png'.");
+        abrirReporte(this, "reporte_matriz.png");
     }
 }
 
@@ -191,7 +318,8 @@ void MainWindow::on_btnGestionarPromociones_clicked() {
     QStringList opciones;
     opciones << "1. Agregar Nueva Promoción" 
              << "2. Agregar Beneficio a una Promoción" 
-             << "3. Generar Reporte (Graphviz)";
+             << "3. Eliminar Promoción"
+             << "4. Generar Reporte (Graphviz)";
              
     bool ok;
     QString seleccion = QInputDialog::getItem(this, "Gestión de Promociones", 
@@ -209,6 +337,12 @@ void MainWindow::on_btnGestionarPromociones_clicked() {
         if (!ok) return;
 
         Promocion nuevaPromo(id, desc.toStdString(), descuento);
+        nuevaPromo.fechaInicio = QInputDialog::getText(this, "Nueva Promoción", "Fecha de inicio (AAAA-MM-DD):", QLineEdit::Normal, "", &ok).toStdString();
+        if (!ok) return;
+        nuevaPromo.fechaFin = QInputDialog::getText(this, "Nueva Promoción", "Fecha de fin (AAAA-MM-DD):", QLineEdit::Normal, "", &ok).toStdString();
+        if (!ok) return;
+        nuevaPromo.diasAplicables = QInputDialog::getText(this, "Nueva Promoción", "Días aplicables:", QLineEdit::Normal, "Lunes, Martes", &ok).toStdString();
+        if (!ok) return;
         listaPromociones->insertarPromocion(nuevaPromo);
         QMessageBox::information(this, "Éxito", "Promoción creada correctamente.");
     } 
@@ -219,28 +353,74 @@ void MainWindow::on_btnGestionarPromociones_clicked() {
         QString beneficio = QInputDialog::getText(this, "Agregar Beneficio", "Descripción del beneficio (Ej. Palomitas gratis):", QLineEdit::Normal, "", &ok);
         if (!ok || beneficio.isEmpty()) return;
 
-        listaPromociones->insertarBeneficio(id, beneficio.toStdString());
+        QString tipo = QInputDialog::getText(this, "Agregar Beneficio", "Tipo (descuento, combo, 2x1):", QLineEdit::Normal, "combo", &ok);
+        if (!ok) return;
+        QString valor = QInputDialog::getText(this, "Agregar Beneficio", "Valor (Ej. 10% o NA):", QLineEdit::Normal, "NA", &ok);
+        if (!ok) return;
+        listaPromociones->insertarBeneficio(id, tipo.toStdString(), beneficio.toStdString(), valor.toStdString());
         QMessageBox::information(this, "Éxito", "Beneficio agregado a la promoción.");
     } 
     else if (seleccion == opciones[2]) {
+        int id = QInputDialog::getInt(this, "Eliminar Promoción", "ID de la promoción:", 1, 1, 1000, 1, &ok);
+        if (!ok) return;
+        if (listaPromociones->eliminarPromocion(id)) {
+            QMessageBox::information(this, "Éxito", "Promoción eliminada correctamente.");
+        } else {
+            QMessageBox::warning(this, "No encontrada", "No existe una promoción con ese ID.");
+        }
+    }
+    else if (seleccion == opciones[3]) {
+        if (listaPromociones->getPrimero() == nullptr) {
+            QMessageBox::information(this, "Promociones", "No hay promociones registradas. Cree una promoción antes de generar el reporte.");
+            return;
+        }
         GeneradorDot generador;
         generador.graficarListaListas(listaPromociones, "reporte_promociones.png");
-        QMessageBox::information(this, "Éxito", "Reporte de Promociones generado como 'reporte_promociones.png'.");
+        abrirReporte(this, "reporte_promociones.png");
     }
 }
 
 // --- GESTIÓN DE SOLICITUDES (ADMIN) ---
 void MainWindow::on_btnGestionarSolicitudes_clicked() {
-    GeneradorDot generador;
-    generador.graficarListaDoble(listaSolicitudes, "reporte_solicitudes.png");
-    QMessageBox::information(this, "Éxito", "Reporte de Solicitudes generado como 'reporte_solicitudes.png'.");
+    QStringList opciones;
+    opciones << "1. Ver cantidad pendientes"
+             << "2. Procesar primera solicitud"
+             << "3. Rechazar solicitud"
+             << "4. Generar reporte Graphviz";
+    bool ok;
+    QString seleccion = QInputDialog::getItem(this, "Solicitudes especiales", "Seleccione una acción:", opciones, 0, false, &ok);
+    if (!ok) return;
+
+    if (seleccion == opciones[0]) {
+        QMessageBox::information(this, "Solicitudes", "Solicitudes registradas: " + QString::number(listaSolicitudes->contar()));
+    } else if (seleccion == opciones[1]) {
+        NodoListaDoble* primera = listaSolicitudes->getPrimero();
+        if (primera == nullptr) {
+            QMessageBox::information(this, "Solicitudes", "No hay solicitudes pendientes.");
+            return;
+        }
+        primera->solicitud.estado = "Atendida";
+        QMessageBox::information(this, "Solicitud procesada", "La solicitud de " + QString::fromStdString(primera->solicitud.cliente) + " fue atendida.");
+    } else if (seleccion == opciones[2]) {
+        int numero = QInputDialog::getInt(this, "Rechazar solicitud", "Número de solicitud:", 1, 1, 100000, 1, &ok);
+        if (!ok) return;
+        if (listaSolicitudes->eliminarPorNumero(numero)) {
+            QMessageBox::information(this, "Solicitud rechazada", "La solicitud fue eliminada.");
+        } else {
+            QMessageBox::warning(this, "No encontrada", "No existe una solicitud con ese número.");
+        }
+    } else {
+        GeneradorDot generador;
+        generador.graficarListaDoble(listaSolicitudes, "reporte_solicitudes.png");
+        abrirReporte(this, "reporte_solicitudes.png");
+    }
 }
 
 // --- VISTA CLIENTE: CONSULTAR CARTELERA ---
 void MainWindow::on_btnVerCarteleraCliente_clicked() {
     GeneradorDot generador;
     generador.graficarArbol(arbol, "cartelera_cliente.png");
-    QMessageBox::information(this, "Cartelera", "Se ha generado la cartelera de películas en 'cartelera_cliente.png'.");
+    abrirReporte(this, "cartelera_cliente.png");
 }
 
 // --- VISTA CLIENTE: RESERVAR ASIENTO ---
@@ -256,16 +436,41 @@ void MainWindow::on_btnReservarAsiento_clicked() {
     int columna = QInputDialog::getInt(this, "Reserva de Asiento", "Ingrese el número de Columna (1-100):", 1, 1, 100, 1, &ok);
     if (!ok) return;
 
-    matriz->insertarAsiento(fila, columna, nombreCliente.toStdString());
+    if (matriz->getFilas() == 0) {
+        QMessageBox::warning(this, "Función no configurada", "El administrador debe configurar una función antes de reservar.");
+        return;
+    }
+
+    if (!matriz->insertarAsiento(fila, columna, nombreCliente.toStdString())) {
+        QMessageBox::warning(this, "Asiento no disponible", "El asiento está ocupado o fuera de los límites de la sala.");
+        return;
+    }
 
     QMessageBox::information(this, "Éxito", "Asiento reservado correctamente para: " + nombreCliente);
 }
 
+void MainWindow::on_btnCancelarReserva_clicked() {
+    bool ok;
+    int fila = QInputDialog::getInt(this, "Cancelar reserva", "Número de fila:", 1, 1, 100, 1, &ok);
+    if (!ok) return;
+    int columna = QInputDialog::getInt(this, "Cancelar reserva", "Número de asiento:", 1, 1, 100, 1, &ok);
+    if (!ok) return;
+    if (matriz->eliminarAsiento(fila, columna)) {
+        QMessageBox::information(this, "Reserva cancelada", "El asiento fue liberado correctamente.");
+    } else {
+        QMessageBox::warning(this, "Reserva no encontrada", "No existe una reserva en esa posicion.");
+    }
+}
+
 // --- VISTA CLIENTE: CONSULTAR PROMOCIONES ---
 void MainWindow::on_btnConsultarPromociones_clicked() {
+    if (listaPromociones->getPrimero() == nullptr) {
+        QMessageBox::information(this, "Promociones", "No hay promociones registradas.");
+        return;
+    }
     GeneradorDot generador;
     generador.graficarListaListas(listaPromociones, "promociones_cliente.png");
-    QMessageBox::information(this, "Promociones", "Se ha generado el reporte de promociones en 'promociones_cliente.png'.");
+    abrirReporte(this, "promociones_cliente.png");
 }
 
 // --- VISTA CLIENTE: REALIZAR SOLICITUD ESPECIAL ---
@@ -276,13 +481,50 @@ void MainWindow::on_btnRealizarSolicitud_clicked() {
                                                   "Ingrese su nombre:", QLineEdit::Normal, "", &ok);
     if (!ok || nombreCliente.isEmpty()) return;
 
+    QString telefono = QInputDialog::getText(this, "Nueva Solicitud Especial", "Ingrese su teléfono:", QLineEdit::Normal, "", &ok);
+    if (!ok || telefono.isEmpty()) return;
+
     QString tipoSolicitud = QInputDialog::getText(this, "Nueva Solicitud Especial", 
                                                   "Tipo de solicitud (Ej. Silla de ruedas, Subtítulos):", 
                                                   QLineEdit::Normal, "", &ok);
     if (!ok || tipoSolicitud.isEmpty()) return;
 
+    QString prioridad = QInputDialog::getItem(this, "Nueva Solicitud Especial", "Prioridad:",
+                                               QStringList() << "Baja" << "Normal" << "Alta", 1, false, &ok);
+    if (!ok) return;
+
+    QString descripcion = QInputDialog::getText(this, "Nueva Solicitud Especial", "Describa su solicitud:", QLineEdit::Normal, "", &ok);
+    if (!ok || descripcion.isEmpty()) return;
+
     Solicitud nuevaSolicitud(nombreCliente.toStdString(), tipoSolicitud.toStdString());
+    nuevaSolicitud.numero = siguienteNumeroSolicitud++;
+    nuevaSolicitud.prioridad = prioridad.toStdString();
+    nuevaSolicitud.telefono = telefono.toStdString();
+    nuevaSolicitud.descripcion = descripcion.toStdString();
+    nuevaSolicitud.fecha = QDate::currentDate().toString("yyyy-MM-dd").toStdString();
     listaSolicitudes->insertar(nuevaSolicitud);
 
     QMessageBox::information(this, "Éxito", "Su solicitud ha sido registrada en el sistema.");
+}
+
+void MainWindow::on_btnConsultarSolicitud_clicked() {
+    bool ok;
+    QString telefono = QInputDialog::getText(this, "Consultar solicitud", "Ingrese su telefono:", QLineEdit::Normal, "", &ok);
+    if (!ok || telefono.isEmpty()) return;
+
+    NodoListaDoble* actual = listaSolicitudes->getPrimero();
+    QString resultado;
+    if (actual != nullptr) {
+        do {
+            if (actual->solicitud.telefono == telefono.toStdString()) {
+                resultado += "Solicitud " + QString::number(actual->solicitud.numero)
+                    + "\nTipo: " + QString::fromStdString(actual->solicitud.tipo)
+                    + "\nDescripcion: " + QString::fromStdString(actual->solicitud.descripcion)
+                    + "\nEstado: " + QString::fromStdString(actual->solicitud.estado)
+                    + "\nFecha: " + QString::fromStdString(actual->solicitud.fecha) + "\n\n";
+            }
+            actual = actual->siguiente;
+        } while (actual != listaSolicitudes->getPrimero());
+    }
+    QMessageBox::information(this, "Estado de solicitudes", resultado.isEmpty() ? "No se encontraron solicitudes." : resultado);
 }

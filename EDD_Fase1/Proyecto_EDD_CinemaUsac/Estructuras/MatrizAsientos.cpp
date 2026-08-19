@@ -2,6 +2,21 @@
 
 MatrizAsientos::MatrizAsientos() {
     raiz = new NodoMatriz(0, 0, "Raiz");
+    filas = 0;
+    columnas = 0;
+}
+
+void MatrizAsientos::configurar(int nuevasFilas, int nuevasColumnas) {
+    if (nuevasFilas <= 0 || nuevasColumnas <= 0) return;
+    raiz = new NodoMatriz(0, 0, "Raiz");
+    filas = nuevasFilas;
+    columnas = nuevasColumnas;
+}
+
+void MatrizAsientos::configurarFuncion(std::string peliculaFuncion, std::string horarioFuncion, std::string salaFuncion) {
+    pelicula = peliculaFuncion;
+    horario = horarioFuncion;
+    sala = salaFuncion;
 }
 
 NodoMatriz* MatrizAsientos::buscarFila(int fila) {
@@ -58,7 +73,20 @@ NodoMatriz* MatrizAsientos::crearColumna(int columna) {
     return nuevaColumna;
 }
 
-void MatrizAsientos::insertarAsiento(int fila, int columna, std::string cliente) {
+NodoMatriz* MatrizAsientos::buscarAsiento(int fila, int columna) {
+    NodoMatriz* filaActual = buscarFila(fila);
+    if (filaActual == nullptr) return nullptr;
+
+    NodoMatriz* asiento = filaActual->derecha;
+    while (asiento != nullptr && asiento->columna < columna) asiento = asiento->derecha;
+    if (asiento != nullptr && asiento->columna == columna) return asiento;
+    return nullptr;
+}
+
+bool MatrizAsientos::insertarAsiento(int fila, int columna, std::string cliente) {
+    if (filas > 0 && (fila < 1 || fila > filas || columna < 1 || columna > columnas)) return false;
+    if (buscarAsiento(fila, columna) != nullptr) return false;
+
     NodoMatriz* cabeceraFila = buscarFila(fila);
     if (cabeceraFila == nullptr) {
         cabeceraFila = crearFila(fila);
@@ -93,6 +121,39 @@ void MatrizAsientos::insertarAsiento(int fila, int columna, std::string cliente)
     }
     nuevoAsiento->arriba = actualCol;
     actualCol->abajo = nuevoAsiento;
+    return true;
+}
+
+bool MatrizAsientos::eliminarAsiento(int fila, int columna) {
+    NodoMatriz* asiento = buscarAsiento(fila, columna);
+    if (asiento == nullptr) return false;
+
+    asiento->izquierda->derecha = asiento->derecha;
+    if (asiento->derecha != nullptr) asiento->derecha->izquierda = asiento->izquierda;
+    asiento->arriba->abajo = asiento->abajo;
+    if (asiento->abajo != nullptr) asiento->abajo->arriba = asiento->arriba;
+    delete asiento;
+    return true;
+}
+
+int MatrizAsientos::getFilas() const {
+    return filas;
+}
+
+int MatrizAsientos::getColumnas() const {
+    return columnas;
+}
+
+std::string MatrizAsientos::getPelicula() const {
+    return pelicula;
+}
+
+std::string MatrizAsientos::getHorario() const {
+    return horario;
+}
+
+std::string MatrizAsientos::getSala() const {
+    return sala;
 }
 
 NodoMatriz* MatrizAsientos::getRaiz() {

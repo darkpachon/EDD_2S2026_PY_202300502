@@ -22,6 +22,40 @@ void ListaCircularDoble::insertar(Solicitud nuevaSolicitud) {
     }
 }
 
+bool ListaCircularDoble::eliminarPorNumero(int numero) {
+    if (primero == nullptr) return false;
+
+    NodoListaDoble* actual = primero;
+    do {
+        if (actual->solicitud.numero == numero) {
+            if (actual == primero && actual == ultimo) {
+                primero = nullptr;
+                ultimo = nullptr;
+            } else {
+                actual->anterior->siguiente = actual->siguiente;
+                actual->siguiente->anterior = actual->anterior;
+                if (actual == primero) primero = actual->siguiente;
+                if (actual == ultimo) ultimo = actual->anterior;
+            }
+            delete actual;
+            return true;
+        }
+        actual = actual->siguiente;
+    } while (actual != primero);
+    return false;
+}
+
+int ListaCircularDoble::contar() {
+    if (primero == nullptr) return 0;
+    int total = 0;
+    NodoListaDoble* actual = primero;
+    do {
+        total++;
+        actual = actual->siguiente;
+    } while (actual != primero);
+    return total;
+}
+
 NodoListaDoble* ListaCircularDoble::getPrimero() {
     return primero;
 }
