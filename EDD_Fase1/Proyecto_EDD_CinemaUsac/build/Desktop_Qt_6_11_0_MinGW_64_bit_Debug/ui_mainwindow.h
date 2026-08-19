@@ -77,6 +77,7 @@ public:
     QWidget *tab_SolicitudesAdmin;
     QVBoxLayout *vboxLayout3;
     QPushButton *btnGestionarSolicitudes;
+    QLabel *lblReporte;
     QWidget *page_cliente;
     QVBoxLayout *verticalLayout_cliente;
     QLabel *lblTituloCliente;
@@ -315,6 +316,15 @@ public:
 
         verticalLayout_admin->addWidget(tabAdmin);
 
+        lblReporte = new QLabel(page_admin);
+        lblReporte->setObjectName("lblReporte");
+        lblReporte->setMinimumSize(QSize(700, 300));
+        lblReporte->setFrameShape(QFrame::Box);
+        lblReporte->setAlignment(Qt::AlignCenter);
+        lblReporte->setScaledContents(false);
+
+        verticalLayout_admin->addWidget(lblReporte);
+
         stackedWidget->addWidget(page_admin);
         page_cliente = new QWidget();
         page_cliente->setObjectName("page_cliente");
@@ -430,6 +440,7 @@ public:
         tabAdmin->setTabText(tabAdmin->indexOf(tab_PromocionesAdmin), QCoreApplication::translate("MainWindow", "3. Promociones", nullptr));
         btnGestionarSolicitudes->setText(QCoreApplication::translate("MainWindow", "Gestionar Solicitudes Especiales", nullptr));
         tabAdmin->setTabText(tabAdmin->indexOf(tab_SolicitudesAdmin), QCoreApplication::translate("MainWindow", "4. Solicitudes", nullptr));
+        lblReporte->setText(QCoreApplication::translate("MainWindow", "El reporte generado aparecer\303\241 aqu\303\255", nullptr));
         lblTituloCliente->setText(QCoreApplication::translate("MainWindow", "Panel de Cliente", nullptr));
         btnCerrarSesionCliente->setText(QCoreApplication::translate("MainWindow", "Cerrar sesi\303\263n", nullptr));
         btnVerCarteleraCliente->setText(QCoreApplication::translate("MainWindow", "Consultar Cartelera", nullptr));

@@ -8,10 +8,8 @@
 #include <QMessageBox>
 #include <QStringList>
 #include <QDate>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFileInfo>
-#include <QUrl>
 #include <fstream>
 #include <sstream>
 
@@ -20,8 +18,13 @@ void abrirReporte(MainWindow* ventana, const QString& nombreArchivo) {
     QString ruta = QDir::current().filePath("reportes_generados/" + nombreArchivo);
     QFileInfo archivo(ruta);
     if (archivo.exists()) {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(archivo.absoluteFilePath()));
-        QMessageBox::information(ventana, "Reporte generado", "El reporte se guardó en:\n" + archivo.absoluteFilePath());
+        QLabel* imagen = ventana->findChild<QLabel*>("lblReporte");
+        QPixmap pixmap(archivo.absoluteFilePath());
+        if (imagen != nullptr && !pixmap.isNull()) {
+            imagen->setText("");
+            imagen->setPixmap(pixmap.scaled(imagen->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        }
+        QMessageBox::information(ventana, "Reporte generado", "El reporte se muestra dentro de la ventana.");
     } else {
         QMessageBox::warning(ventana, "Graphviz", "No se encontró el PNG. Verifique que Graphviz esté instalado y que dot esté en el PATH.");
     }
@@ -243,13 +246,6 @@ void MainWindow::on_btnGraficarArbol_clicked() {
     generador.graficarArbol(arbol, rutaImagen);
     abrirReporte(this, QString::fromStdString(rutaImagen));
 
-    QLabel* lblImg = findChild<QLabel*>("lblImagen");
-    if (lblImg) {
-        QPixmap pix(QString::fromStdString(rutaImagen));
-        if (!pix.isNull()) {
-            lblImg->setPixmap(pix.scaled(lblImg->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        }
-    }
     ui->lblMensajeAdmin->setText("¡Reporte de Árbol generado con éxito!");
 }
 

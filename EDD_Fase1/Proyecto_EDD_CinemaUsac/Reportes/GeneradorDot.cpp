@@ -156,6 +156,7 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
     archivo << "rankdir=TB;\n";
     archivo << "labelfontsize=18; label=\"Función: " << matriz->getPelicula()
             << " - " << matriz->getHorario() << " - " << matriz->getSala() << "\";\n";
+    archivo << "nodesep=0.45; ranksep=0.65; splines=ortho;\n";
     archivo << "node [fontname=\"Arial\"];\n";
     archivo << "Funcion [shape=diamond, style=filled, fillcolor=white, label=\"Funcion\"];\n";
 
@@ -169,7 +170,11 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
         archivo << "Columna" << columna
                 << " [shape=box, style=filled, fillcolor=\"#facc15\", label=\""
                 << "C" << columna << "\"];\n";
-        archivo << "Funcion -> Columna" << columna << " [color=gray, constraint=false];\n";
+        if (columna == 1) {
+            archivo << "Funcion -> Columna" << columna << " [color=gray];\n";
+        } else {
+            archivo << "Columna" << (columna - 1) << " -> Columna" << columna << " [color=gray];\n";
+        }
     }
 
     int reservados = 0;
@@ -185,7 +190,11 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
         archivo << "Fila" << fila
                 << " [shape=box, style=filled, fillcolor=\"#facc15\", label=\"F"
                 << fila << "\"];\n";
-        archivo << "Funcion -> Fila" << fila << " [color=gray, constraint=false];\n";
+        if (fila == 1) {
+            archivo << "Funcion -> Fila" << fila << " [color=gray];\n";
+        } else {
+            archivo << "Fila" << (fila - 1) << " -> Fila" << fila << " [color=gray];\n";
+        }
 
         for (int columna = 1; columna <= matriz->getColumnas(); columna++) {
             NodoMatriz* asiento = matriz->buscarAsiento(fila, columna);
@@ -197,8 +206,17 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
             } else {
                 archivo << id << " [shape=box, style=dashed, color=gray, label=\"Libre\"];\n";
             }
-            archivo << "Fila" << fila << " -> " << id << " [color=gray];\n";
-            archivo << "Columna" << columna << " -> " << id << " [color=gray, constraint=false];\n";
+            if (columna == 1) {
+                archivo << "Fila" << fila << " -> " << id << " [color=gray];\n";
+            } else {
+                archivo << "Asiento_" << fila << "_" << (columna - 1) << " -> " << id << " [color=gray];\n";
+            }
+
+            if (fila == 1) {
+                archivo << "Columna" << columna << " -> " << id << " [color=gray];\n";
+            } else {
+                archivo << "Asiento_" << (fila - 1) << "_" << columna << " -> " << id << " [color=gray, constraint=false];\n";
+            }
         }
     }
     int libres = totalAsientos - reservados;
