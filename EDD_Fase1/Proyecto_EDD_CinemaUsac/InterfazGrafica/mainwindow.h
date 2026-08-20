@@ -19,34 +19,34 @@ public:
     ~MainWindow();
 
 private slots:
-    // --- Eventos Generales ---
+     
     void on_btnIngresar_clicked();
     void on_btnCerrarSesionAdmin_clicked();
     void on_btnCerrarSesionCliente_clicked();
 
-    // --- Eventos del Administrador ---
+     
     void on_btnCargarPeliculas_clicked();
     void on_btnInsertarPelicula_clicked();
     void on_btnEliminarPelicula_clicked();
     void on_btnVerCarteleraAdmin_clicked();
     void on_btnGraficarArbol_clicked();
-    void on_btnGestionarAsientos_clicked();     // Para administrar la matriz
-    void on_btnGestionarPromociones_clicked();  // Para agregar promos y beneficios
-    void on_btnGestionarSolicitudes_clicked();  // Para ver la lista circular
+    void on_btnGestionarAsientos_clicked();      
+    void on_btnGestionarPromociones_clicked();   
+    void on_btnGestionarSolicitudes_clicked();   
 
-    // --- Eventos del Cliente ---
-    void on_btnVerCarteleraCliente_clicked();   // Para ver el árbol
+     
+    void on_btnVerCarteleraCliente_clicked();    
     void on_btnBuscarPeliculaCliente_clicked();
-    void on_btnReservarAsiento_clicked();       // <--- NUEVO: Inserción en Matriz
+    void on_btnReservarAsiento_clicked();        
     void on_btnCancelarReserva_clicked();
-    void on_btnConsultarPromociones_clicked();  // Para ver la lista de listas
-    void on_btnRealizarSolicitud_clicked();     // Para insertar en la lista circular
+    void on_btnConsultarPromociones_clicked();   
+    void on_btnRealizarSolicitud_clicked();      
     void on_btnConsultarSolicitud_clicked();
 
 private:
     Ui::MainWindow *ui;
     
-    // Punteros a las estructuras globales en memoria
+     
     ArbolPeliculas* arbol;
     MatrizAsientos* matriz;
     ListaCircularDoble* listaSolicitudes;
@@ -56,4 +56,4 @@ private:
     void agregarPeliculasCartelera(NodoArbol* nodo, QStringList& peliculas);
 };
 
-#endif // MAINWINDOW_H
+#endif

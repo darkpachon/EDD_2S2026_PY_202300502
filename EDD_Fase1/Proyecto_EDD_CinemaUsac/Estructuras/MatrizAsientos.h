@@ -31,7 +31,7 @@ public:
     std::string getPelicula() const;
     std::string getHorario() const;
     std::string getSala() const;
-    NodoMatriz* getRaiz(); // Útil para Graphviz
+    NodoMatriz* getRaiz();  
 };
 
-#endif // MATRIZASIENTOS_H
+#endif

@@ -16,4 +16,4 @@ public:
     NodoListaDoble* getPrimero();
 };
 
-#endif // LISTACIRCULARDOBLE_H
+#endif

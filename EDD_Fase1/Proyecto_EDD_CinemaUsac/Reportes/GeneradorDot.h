@@ -19,4 +19,4 @@ public:
     void graficarListaListas(ListaDeListas* lista, std::string rutaSalida);
 };
 
-#endif // GENERADORDOT_H
+#endif

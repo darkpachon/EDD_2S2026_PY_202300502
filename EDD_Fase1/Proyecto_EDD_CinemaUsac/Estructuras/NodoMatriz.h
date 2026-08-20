@@ -29,4 +29,4 @@ public:
     }
 };
 
-#endif // NODOMATRIZ_H
+#endif

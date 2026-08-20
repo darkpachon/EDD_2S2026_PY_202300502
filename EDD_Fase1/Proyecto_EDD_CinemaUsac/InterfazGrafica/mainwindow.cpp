@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     
-    // Inicializamos las estructuras en la memoria al abrir el programa
+     
     arbol = new ArbolPeliculas();
     matriz = new MatrizAsientos();
     listaSolicitudes = new ListaCircularDoble();
@@ -53,26 +53,26 @@ MainWindow::~MainWindow() {
     delete listaPromociones;
 }
 
-// --- LÓGICA DEL LOGIN ---
+ 
 void MainWindow::on_btnIngresar_clicked() {
     QString usuario = ui->txtUsuario->text();
     QString password = ui->txtPassword->text();
 
-    // 1. Acceso para el Administrador
+     
     if (usuario == "admin" && password == "admin123") {
-        ui->stackedWidget->setCurrentIndex(1); // Va a la página 1 (Admin)
+        ui->stackedWidget->setCurrentIndex(1);  
         ui->txtUsuario->clear();
         ui->txtPassword->clear();
         ui->lblMensaje->clear();
     } 
-    // 2. Acceso para el Usuario/Cliente
+     
     else if (usuario == "cliente" && password == "cliente123") {
-        ui->stackedWidget->setCurrentIndex(2); // Va a la página 2 (Cliente)
+        ui->stackedWidget->setCurrentIndex(2);  
         ui->txtUsuario->clear();
         ui->txtPassword->clear();
         ui->lblMensaje->clear();
     } 
-    // 3. Error
+     
     else {
         ui->lblMensaje->setText("Usuario o contraseña incorrectos");
     }
@@ -92,7 +92,7 @@ void MainWindow::on_btnCerrarSesionCliente_clicked() {
     ui->lblMensaje->clear();
 }
 
-// --- LÓGICA DE CARGA MASIVA CSV DE PELÍCULAS ---
+ 
 void MainWindow::on_btnCargarPeliculas_clicked() {
     QString rutaArchivo = QFileDialog::getOpenFileName(this, "Abrir CSV de Películas", "", "Archivos CSV (*.csv)");
     if (rutaArchivo.isEmpty()) return; 
@@ -101,7 +101,7 @@ void MainWindow::on_btnCargarPeliculas_clicked() {
     std::string linea;
 
     if (archivo.is_open()) {
-        std::getline(archivo, linea); // Ignorar la primera línea (los encabezados)
+        std::getline(archivo, linea);  
 
         while (std::getline(archivo, linea)) {
             if (!linea.empty() && linea.back() == '\r') {
@@ -140,7 +140,7 @@ void MainWindow::on_btnCargarPeliculas_clicked() {
     }
 }
 
-// --- INSERTAR PELÍCULA MANUALMENTE ---
+ 
 void MainWindow::on_btnInsertarPelicula_clicked() {
     try {
         QString codStr = ui->txtCodigo->text();
@@ -238,7 +238,7 @@ void MainWindow::on_btnVerCarteleraAdmin_clicked() {
     QMessageBox::information(this, "Cartelera completa", peliculas.isEmpty() ? "No hay peliculas registradas." : peliculas.join("\n"));
 }
 
-// --- GENERAR REPORTE DEL ÁRBOL ---
+ 
 void MainWindow::on_btnGraficarArbol_clicked() {
     std::string rutaImagen = "reporte_arbol.png";
 
@@ -249,7 +249,7 @@ void MainWindow::on_btnGraficarArbol_clicked() {
     ui->lblMensajeAdmin->setText("¡Reporte de Árbol generado con éxito!");
 }
 
-// --- GESTIÓN DE ASIENTOS (ADMIN) ---
+ 
 void MainWindow::on_btnGestionarAsientos_clicked() {
     QStringList opciones;
     opciones << "1. Configurar función"
@@ -337,7 +337,7 @@ void MainWindow::on_btnGestionarAsientos_clicked() {
     }
 }
 
-// --- GESTIÓN DE PROMOCIONES (ADMIN) ---
+ 
 void MainWindow::on_btnGestionarPromociones_clicked() {
     QStringList opciones;
     opciones << "1. Agregar Nueva Promoción" 
@@ -404,7 +404,7 @@ void MainWindow::on_btnGestionarPromociones_clicked() {
     }
 }
 
-// --- GESTIÓN DE SOLICITUDES (ADMIN) ---
+ 
 void MainWindow::on_btnGestionarSolicitudes_clicked() {
     QStringList opciones;
     opciones << "1. Ver cantidad pendientes"
@@ -440,7 +440,7 @@ void MainWindow::on_btnGestionarSolicitudes_clicked() {
     }
 }
 
-// --- VISTA CLIENTE: CONSULTAR CARTELERA ---
+ 
 void MainWindow::on_btnVerCarteleraCliente_clicked() {
     QStringList peliculas;
     agregarPeliculasCartelera(arbol->getRaiz(), peliculas);
@@ -484,7 +484,7 @@ void MainWindow::on_btnBuscarPeliculaCliente_clicked() {
         + "\nFin: " + QString::fromStdString(pelicula->fecha_fin));
 }
 
-// --- VISTA CLIENTE: RESERVAR ASIENTO ---
+ 
 void MainWindow::on_btnReservarAsiento_clicked() {
     bool ok;
     
@@ -528,7 +528,7 @@ void MainWindow::on_btnCancelarReserva_clicked() {
     }
 }
 
-// --- VISTA CLIENTE: CONSULTAR PROMOCIONES ---
+ 
 void MainWindow::on_btnConsultarPromociones_clicked() {
     if (listaPromociones->getPrimero() == nullptr) {
         QMessageBox::information(this, "Promociones", "No hay promociones registradas.");
@@ -578,7 +578,7 @@ void MainWindow::on_btnConsultarPromociones_clicked() {
         resultado.isEmpty() ? "No hay promociones activas para hoy." : resultado);
 }
 
-// --- VISTA CLIENTE: REALIZAR SOLICITUD ESPECIAL ---
+ 
 void MainWindow::on_btnRealizarSolicitud_clicked() {
     bool ok;
     

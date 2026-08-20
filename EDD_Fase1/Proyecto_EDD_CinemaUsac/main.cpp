@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    MainWindow w; // Crea la ventana principal
-    w.show();     // La muestra en pantalla
-    return a.exec(); // Mantiene el programa corriendo
+    MainWindow w;  
+    w.show();      
+    return a.exec();  
 }

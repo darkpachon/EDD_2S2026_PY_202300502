@@ -6,8 +6,8 @@ using namespace std;
 
 class Pelicula {
 public:
-    int codigo;             // Ej: 34 (El número interno que usa tu Árbol Binario para ordenar)
-    string codigoOriginal;  // Ej: "P034" (El texto real para mostrar en pantalla)
+    int codigo;              
+    string codigoOriginal;   
     string titulo;
     string genero;
     int duracion;
@@ -16,7 +16,7 @@ public:
     string fecha_estreno;
     string fecha_fin;
 
-    // Constructor completo
+     
     Pelicula(int _codigo, string _codigoOriginal, string _titulo, string _genero, int _duracion, string _clasificacion, string _idioma, string _fecha_estreno, string _fecha_fin) {
         codigo = _codigo;
         codigoOriginal = _codigoOriginal;
@@ -29,8 +29,8 @@ public:
         fecha_fin = _fecha_fin;
     }
 
-    // Constructor vacío por defecto
+     
     Pelicula() : codigo(0), duracion(0) {}
 };
 
-#endif // PELICULA_H
+#endif

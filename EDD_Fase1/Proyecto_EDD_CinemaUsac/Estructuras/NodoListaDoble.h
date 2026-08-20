@@ -16,4 +16,4 @@ public:
     }
 };
 
-#endif // NODOLISTADOBLE_H
+#endif

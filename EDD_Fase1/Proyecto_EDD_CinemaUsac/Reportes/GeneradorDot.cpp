@@ -36,9 +36,9 @@ int diasHasta(const std::string& texto) {
 }
 }
 
-// Función principal que crea el archivo
+ 
 void GeneradorDot::graficarArbol(ArbolPeliculas* arbol, std::string rutaSalida) {
-    // Si el árbol está vacío, no hacemos nada
+     
     if (arbol == nullptr || arbol->getRaiz() == nullptr) {
         return; 
     }
@@ -47,24 +47,24 @@ void GeneradorDot::graficarArbol(ArbolPeliculas* arbol, std::string rutaSalida) 
     std::ofstream archivo("reportes_generados/arbol_peliculas.dot");
     if (!archivo.is_open()) return;
 
-    // Encabezado básico de Graphviz
+     
     archivo << "digraph G {\n";
     archivo << "node [shape=box, style=\"filled,rounded\", fontname=\"Arial\"];\n";
     archivo << "edge [color=black];\n";
 
-    // Llamamos a la función recursiva pasándole la raíz
+     
     generarNodos(arbol->getRaiz(), archivo);
 
     archivo << "}\n";
     archivo.close();
 
-    // Comando de consola para que Graphviz convierta el .dot a la imagen PNG
+     
     std::string salida = "reportes_generados/" + rutaSalida;
     std::string comando = "dot -Tpng reportes_generados/arbol_peliculas.dot -o \"" + salida + "\"";
     if (system(comando.c_str()) != 0) std::cerr << "No se pudo ejecutar Graphviz (dot).\n";
 }
 
-// Función recursiva para recorrer el árbol y dibujar las flechas
+ 
 void GeneradorDot::generarNodos(NodoArbol* nodo, std::ofstream& archivo) {
     if (nodo == nullptr) return;
 
@@ -84,19 +84,19 @@ void GeneradorDot::generarNodos(NodoArbol* nodo, std::ofstream& archivo) {
             << nodo->pelicula.duracion << " min\\n"
             << nodo->pelicula.clasificacion << "\"];\n";
 
-    // Si tiene hijo izquierdo, dibujamos la flecha y aplicamos recursividad
+     
     if (nodo->izquierdo != nullptr) {
         archivo << "Nodo" << nodo->pelicula.codigo << " -> Nodo" << nodo->izquierdo->pelicula.codigo << ";\n";
         generarNodos(nodo->izquierdo, archivo);
     }
     
-    // Si tiene hijo derecho, dibujamos la flecha y aplicamos recursividad
+     
     if (nodo->derecho != nullptr) {
         archivo << "Nodo" << nodo->pelicula.codigo << " -> Nodo" << nodo->derecho->pelicula.codigo << ";\n";
         generarNodos(nodo->derecho, archivo);
     }
 }
-// Agregar al final de GeneradorDot.cpp
+ 
 void GeneradorDot::graficarListaDoble(ListaCircularDoble* lista, std::string rutaSalida) {
     if (lista == nullptr || lista->getPrimero() == nullptr) {
         return; 
@@ -107,15 +107,15 @@ void GeneradorDot::graficarListaDoble(ListaCircularDoble* lista, std::string rut
     if (!archivo.is_open()) return;
 
     archivo << "digraph G {\n";
-    archivo << "rankdir=LR;\n"; // De izquierda a derecha
+    archivo << "rankdir=LR;\n";  
     archivo << "node [shape=ellipse, style=filled, fillcolor=lightyellow, fontname=\"Arial\"];\n";
     
     NodoListaDoble* actual = lista->getPrimero();
-    int contador = 0; // Usaremos un contador para darle un ID único a cada nodo en Graphviz
+    int contador = 0;  
 
     int solicitudesPendientes = 0;
 
-    // Primera pasada: Crear los nodos
+     
     do {
         if (actual->solicitud.estado == "Pendiente") solicitudesPendientes++;
         archivo << "Nodo" << contador << " [shape=ellipse, label=\"Solicitud: " << actual->solicitud.numero
@@ -127,10 +127,10 @@ void GeneradorDot::graficarListaDoble(ListaCircularDoble* lista, std::string rut
         contador++;
     } while (actual != lista->getPrimero());
 
-    // Segunda pasada: Crear las conexiones
+     
     int totalNodos = contador;
     for (int i = 0; i < totalNodos; i++) {
-        int siguiente = (i + 1) % totalNodos; // Enlaza el último con el primero mágicamente
+        int siguiente = (i + 1) % totalNodos;  
         
         archivo << "Nodo" << i << " -> Nodo" << siguiente << " [dir=both, color=darkblue];\n";
     }
@@ -144,7 +144,7 @@ void GeneradorDot::graficarListaDoble(ListaCircularDoble* lista, std::string rut
     std::string comando = "dot -Tpng reportes_generados/lista_solicitudes.dot -o \"" + salida + "\"";
     if (system(comando.c_str()) != 0) std::cerr << "No se pudo ejecutar Graphviz (dot).\n";
 }
-// --- 1. REPORTE DE LA MATRIZ ORTOGONAL ---
+ 
 void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida) {
     if (matriz == nullptr || matriz->getRaiz() == nullptr) return;
 
@@ -160,7 +160,7 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
     archivo << "node [fontname=\"Arial\"];\n";
     archivo << "Funcion [shape=diamond, style=filled, fillcolor=white, label=\"Funcion\"];\n";
 
-    // Cabeceras superiores de las columnas.
+     
     archivo << "{ rank=same; Funcion; ";
     for (int columna = 1; columna <= matriz->getColumnas(); columna++) {
         archivo << "Columna" << columna << "; ";
@@ -180,7 +180,7 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
     int reservados = 0;
     int totalAsientos = matriz->getFilas() * matriz->getColumnas();
     for (int fila = 1; fila <= matriz->getFilas(); fila++) {
-        // Cada fila conserva su alineacion horizontal mediante rank=same.
+         
         archivo << "{ rank=same; Fila" << fila << "; ";
         for (int columna = 1; columna <= matriz->getColumnas(); columna++) {
             archivo << "Asiento_" << fila << "_" << columna << "; ";
@@ -232,7 +232,7 @@ void GeneradorDot::graficarMatriz(MatrizAsientos* matriz, std::string rutaSalida
     if (system(comando.c_str()) != 0) std::cerr << "No se pudo ejecutar Graphviz (dot).\n";
 }
 
-// --- 2. REPORTE DE LA LISTA DE LISTAS (PROMOCIONES) ---
+ 
 void GeneradorDot::graficarListaListas(ListaDeListas* lista, std::string rutaSalida) {
     if (lista == nullptr || lista->getPrimero() == nullptr) return;
 
@@ -241,7 +241,7 @@ void GeneradorDot::graficarListaListas(ListaDeListas* lista, std::string rutaSal
     if (!archivo.is_open()) return;
 
     archivo << "digraph G {\n";
-    archivo << "rankdir=LR;\n"; // Principal de izquierda a derecha
+    archivo << "rankdir=LR;\n";  
     archivo << "node [shape=box, style=filled, fontname=\"Arial\"];\n";
 
     NodoListaListas* actualPromo = lista->getPrimero();
@@ -254,7 +254,7 @@ void GeneradorDot::graficarListaListas(ListaDeListas* lista, std::string rutaSal
     } while (promoParaAlinear != actualPromo);
     archivo << "}\n";
 
-    // Nodos principales: promociones en una lista circular horizontal.
+     
     do {
         std::string idPromo = "Promo_" + std::to_string(actualPromo->promocion.id);
         archivo << idPromo << " [shape=box, style=\"filled,rounded\", fillcolor=\"#e0f2fe\", label=\"Código: "
@@ -262,12 +262,12 @@ void GeneradorDot::graficarListaListas(ListaDeListas* lista, std::string rutaSal
             << "\\nVigencia: " << actualPromo->promocion.fechaInicio << " a " << actualPromo->promocion.fechaFin
             << "\"];\n";
 
-        // La ultima promocion tambien apunta a la primera para hacer visible la circularidad.
+         
         std::string idSiguientePromo = "Promo_" + std::to_string(actualPromo->siguiente->promocion.id);
         archivo << idPromo << " -> " << idSiguientePromo
                 << " [color=darkgreen, penwidth=2, constraint=false];\n";
 
-        // Cada promocion despliega su sublista vertical de beneficios.
+         
         NodoBeneficio* actualBen = actualPromo->listaBeneficios;
         int contBen = 0;
         std::string nodoAnterior = idPromo;

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Nodo para la sub-lista (Beneficios)
+ 
 class NodoBeneficio {
 public:
     string beneficio;
@@ -18,7 +18,7 @@ public:
         : beneficio(_beneficio), tipo(_tipo), valor(_valor), siguiente(nullptr), anterior(nullptr) {}
 };
 
-// Nodo para la lista principal (Promociones)
+ 
 class NodoListaListas {
 public:
     Promocion promocion;
@@ -32,4 +32,4 @@ public:
     }
 };
 
-#endif // NODOLISTALISTAS_H
+#endif

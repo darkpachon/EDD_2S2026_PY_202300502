@@ -1,21 +1,13 @@
 digraph G {
 node [shape=box, style="filled,rounded", fontname="Arial"];
 edge [color=black];
-Nodo1 [style="filled,rounded", fillcolor="#d1d5db", label="P001\nAvatar\n180 min\nB15"];
-Nodo1 -> Nodo2;
-Nodo2 [style="filled,rounded", fillcolor="#d1d5db", label="P002\nIntensamente 2\n100 min\nAA"];
-Nodo2 -> Nodo3;
-Nodo3 [style="filled,rounded", fillcolor="#fde047", label="P003\nEl Rey Leon\n120 min\nA"];
-Nodo3 -> Nodo4;
-Nodo4 [style="filled,rounded", fillcolor="#86efac", label="P004\nMatrix\n136 min\nB15"];
-Nodo4 -> Nodo5;
-Nodo5 [style="filled,rounded", fillcolor="#86efac", label="P005\nSuper Mario Bros\n92 min\nA"];
-Nodo5 -> Nodo34;
 Nodo34 [style="filled,rounded", fillcolor="#d1d5db", label="P034\nInception\n148 min\nC"];
 Nodo34 -> Nodo12;
 Nodo12 [style="filled,rounded", fillcolor="#d1d5db", label="P012\nThe Dark Knight\n152 min\nB15"];
 Nodo12 -> Nodo8;
 Nodo8 [style="filled,rounded", fillcolor="#d1d5db", label="P008\nToy Story\n81 min\nA"];
+Nodo8 -> Nodo3;
+Nodo3 [style="filled,rounded", fillcolor="#d1d5db", label="P003\nAvengers: Endgame\n181 min\nB15"];
 Nodo12 -> Nodo21;
 Nodo21 [style="filled,rounded", fillcolor="#d1d5db", label="P021\nThe Lion King\n88 min\nA"];
 Nodo21 -> Nodo19;

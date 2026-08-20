@@ -8,7 +8,7 @@ public:
     int numero;
     string cliente;
     string telefono;
-    string tipo; // Ej: "Silla de ruedas", "Subtitulos"
+    string tipo;  
     string prioridad;
     string descripcion;
     string fecha;

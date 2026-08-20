@@ -18,7 +18,7 @@ public:
     void eliminar(int codigoAEliminar);
     Pelicula* buscar(int codigoABuscar);
     void mostrarInorden();
-    NodoArbol* getRaiz(); // Útil para cuando hagamos el reporte en Graphviz
+    NodoArbol* getRaiz();  
 };
 
-#endif // ARBOLPELICULAS_H
+#endif
