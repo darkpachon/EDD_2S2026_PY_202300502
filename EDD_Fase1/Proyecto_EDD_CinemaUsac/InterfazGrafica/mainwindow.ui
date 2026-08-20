@@ -159,6 +159,7 @@
            <attribute name="title"><string>1. Cartelera y Reservas</string></attribute>
            <layout class="QVBoxLayout">
             <item><widget class="QPushButton" name="btnVerCarteleraCliente"><property name="text"><string>Consultar Cartelera</string></property></widget></item>
+            <item><widget class="QPushButton" name="btnBuscarPeliculaCliente"><property name="text"><string>Buscar Película por Código</string></property></widget></item>
             <item><widget class="QPushButton" name="btnReservarAsiento"><property name="text"><string>Realizar Reserva de Asiento</string></property></widget></item>
             <item><widget class="QPushButton" name="btnCancelarReserva"><property name="text"><string>Cancelar Reserva</string></property></widget></item>
            </layout>

@@ -36,6 +36,7 @@ private slots:
 
     // --- Eventos del Cliente ---
     void on_btnVerCarteleraCliente_clicked();   // Para ver el árbol
+    void on_btnBuscarPeliculaCliente_clicked();
     void on_btnReservarAsiento_clicked();       // <--- NUEVO: Inserción en Matriz
     void on_btnCancelarReserva_clicked();
     void on_btnConsultarPromociones_clicked();  // Para ver la lista de listas

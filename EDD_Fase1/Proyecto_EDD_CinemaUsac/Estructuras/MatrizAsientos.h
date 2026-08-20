@@ -22,6 +22,7 @@ public:
     MatrizAsientos();
     void configurar(int nuevasFilas, int nuevasColumnas);
     void configurarFuncion(std::string peliculaFuncion, std::string horarioFuncion, std::string salaFuncion);
+    void eliminarFuncion();
     bool insertarAsiento(int fila, int columna, std::string cliente);
     bool eliminarAsiento(int fila, int columna);
     NodoMatriz* buscarAsiento(int fila, int columna);

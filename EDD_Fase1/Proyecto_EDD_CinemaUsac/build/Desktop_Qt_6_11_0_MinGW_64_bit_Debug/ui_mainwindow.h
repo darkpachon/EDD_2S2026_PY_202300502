@@ -86,6 +86,7 @@ public:
     QWidget *tab_Reservas;
     QVBoxLayout *vboxLayout4;
     QPushButton *btnVerCarteleraCliente;
+    QPushButton *btnBuscarPeliculaCliente;
     QPushButton *btnReservarAsiento;
     QPushButton *btnCancelarReserva;
     QWidget *tab_PromocionesCliente;
@@ -353,6 +354,11 @@ public:
 
         vboxLayout4->addWidget(btnVerCarteleraCliente);
 
+        btnBuscarPeliculaCliente = new QPushButton(tab_Reservas);
+        btnBuscarPeliculaCliente->setObjectName("btnBuscarPeliculaCliente");
+
+        vboxLayout4->addWidget(btnBuscarPeliculaCliente);
+
         btnReservarAsiento = new QPushButton(tab_Reservas);
         btnReservarAsiento->setObjectName("btnReservarAsiento");
 
@@ -444,6 +450,7 @@ public:
         lblTituloCliente->setText(QCoreApplication::translate("MainWindow", "Panel de Cliente", nullptr));
         btnCerrarSesionCliente->setText(QCoreApplication::translate("MainWindow", "Cerrar sesi\303\263n", nullptr));
         btnVerCarteleraCliente->setText(QCoreApplication::translate("MainWindow", "Consultar Cartelera", nullptr));
+        btnBuscarPeliculaCliente->setText(QCoreApplication::translate("MainWindow", "Buscar Pel\303\255cula por C\303\263digo", nullptr));
         btnReservarAsiento->setText(QCoreApplication::translate("MainWindow", "Realizar Reserva de Asiento", nullptr));
         btnCancelarReserva->setText(QCoreApplication::translate("MainWindow", "Cancelar Reserva", nullptr));
         tabCliente->setTabText(tabCliente->indexOf(tab_Reservas), QCoreApplication::translate("MainWindow", "1. Cartelera y Reservas", nullptr));

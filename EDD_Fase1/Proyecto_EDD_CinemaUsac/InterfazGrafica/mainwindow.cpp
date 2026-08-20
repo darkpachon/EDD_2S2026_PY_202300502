@@ -255,10 +255,12 @@ void MainWindow::on_btnGestionarAsientos_clicked() {
     opciones << "1. Configurar función"
              << "2. Reservar asiento"
              << "3. Liberar asiento"
-             << "4. Generar reporte de matriz";
-             
+             << "4. Visualizar estado de función"
+             << "5. Eliminar función"
+             << "6. Generar reporte de matriz";
+
     bool ok;
-    QString seleccion = QInputDialog::getItem(this, "Gestión de Asientos", 
+    QString seleccion = QInputDialog::getItem(this, "Gestión de Asientos",
                                               "Seleccione una acción:", opciones, 0, false, &ok);
     if (!ok) return;
 
@@ -303,6 +305,32 @@ void MainWindow::on_btnGestionarAsientos_clicked() {
             QMessageBox::warning(this, "No encontrado", "Ese asiento no está reservado.");
         }
     } else if (seleccion == opciones[3]) {
+        if (matriz->getFilas() == 0) {
+            QMessageBox::information(this, "Funciones", "No hay una función configurada.");
+            return;
+        }
+        int total = matriz->getFilas() * matriz->getColumnas();
+        int ocupados = 0;
+        for (int fila = 1; fila <= matriz->getFilas(); fila++) {
+            for (int columna = 1; columna <= matriz->getColumnas(); columna++) {
+                if (matriz->buscarAsiento(fila, columna) != nullptr) ocupados++;
+            }
+        }
+        QMessageBox::information(this, "Estado de función",
+            "Película: " + QString::fromStdString(matriz->getPelicula())
+            + "\nHorario: " + QString::fromStdString(matriz->getHorario())
+            + "\nSala: " + QString::fromStdString(matriz->getSala())
+            + "\nDimensiones: " + QString::number(matriz->getFilas()) + " x " + QString::number(matriz->getColumnas())
+            + "\nAsientos libres: " + QString::number(total - ocupados)
+            + "\nAsientos ocupados: " + QString::number(ocupados));
+    } else if (seleccion == opciones[4]) {
+        if (matriz->getFilas() == 0) {
+            QMessageBox::information(this, "Funciones", "No hay una función configurada.");
+            return;
+        }
+        matriz->eliminarFuncion();
+        QMessageBox::information(this, "Función eliminada", "La función y sus reservas fueron eliminadas.");
+    } else if (seleccion == opciones[5]) {
         GeneradorDot generador;
         generador.graficarMatriz(matriz, "reporte_matriz.png");
         abrirReporte(this, "reporte_matriz.png");
@@ -414,9 +442,46 @@ void MainWindow::on_btnGestionarSolicitudes_clicked() {
 
 // --- VISTA CLIENTE: CONSULTAR CARTELERA ---
 void MainWindow::on_btnVerCarteleraCliente_clicked() {
-    GeneradorDot generador;
-    generador.graficarArbol(arbol, "cartelera_cliente.png");
-    abrirReporte(this, "cartelera_cliente.png");
+    QStringList peliculas;
+    agregarPeliculasCartelera(arbol->getRaiz(), peliculas);
+    QStringList disponibles;
+    for (const QString& pelicula : peliculas) {
+        if (pelicula.endsWith("En cartelera") || pelicula.endsWith("Proximo a retirar")) {
+            disponibles << pelicula;
+        }
+    }
+    QMessageBox::information(this, "Cartelera disponible",
+        disponibles.isEmpty() ? "No hay películas disponibles actualmente." : disponibles.join("\n"));
+}
+
+void MainWindow::on_btnBuscarPeliculaCliente_clicked() {
+    bool ok;
+    QString codigo = QInputDialog::getText(this, "Buscar película", "Código de película (Ej. P034):", QLineEdit::Normal, "", &ok);
+    if (!ok || codigo.trimmed().isEmpty()) return;
+
+    std::string codigoTexto = codigo.toStdString();
+    if (codigoTexto.size() > 1 && (codigoTexto[0] == 'P' || codigoTexto[0] == 'p')) codigoTexto.erase(0, 1);
+    int codigoNumerico;
+    try {
+        codigoNumerico = std::stoi(codigoTexto);
+    } catch (...) {
+        QMessageBox::warning(this, "Código inválido", "Ingrese un código como P034.");
+        return;
+    }
+    Pelicula* pelicula = arbol->buscar(codigoNumerico);
+    if (pelicula == nullptr) {
+        QMessageBox::information(this, "Búsqueda", "No se encontró la película.");
+        return;
+    }
+    QMessageBox::information(this, "Detalle de película",
+        "Código: " + QString::fromStdString(pelicula->codigoOriginal)
+        + "\nTítulo: " + QString::fromStdString(pelicula->titulo)
+        + "\nGénero: " + QString::fromStdString(pelicula->genero)
+        + "\nDuración: " + QString::number(pelicula->duracion) + " min"
+        + "\nClasificación: " + QString::fromStdString(pelicula->clasificacion)
+        + "\nIdioma: " + QString::fromStdString(pelicula->idioma)
+        + "\nEstreno: " + QString::fromStdString(pelicula->fecha_estreno)
+        + "\nFin: " + QString::fromStdString(pelicula->fecha_fin));
 }
 
 // --- VISTA CLIENTE: RESERVAR ASIENTO ---
@@ -447,14 +512,19 @@ void MainWindow::on_btnReservarAsiento_clicked() {
 
 void MainWindow::on_btnCancelarReserva_clicked() {
     bool ok;
+    QString cliente = QInputDialog::getText(this, "Cancelar reserva", "Nombre del cliente:", QLineEdit::Normal, "", &ok);
+    if (!ok || cliente.trimmed().isEmpty()) return;
     int fila = QInputDialog::getInt(this, "Cancelar reserva", "Número de fila:", 1, 1, 100, 1, &ok);
     if (!ok) return;
     int columna = QInputDialog::getInt(this, "Cancelar reserva", "Número de asiento:", 1, 1, 100, 1, &ok);
     if (!ok) return;
-    if (matriz->eliminarAsiento(fila, columna)) {
-        QMessageBox::information(this, "Reserva cancelada", "El asiento fue liberado correctamente.");
-    } else {
+    NodoMatriz* asiento = matriz->buscarAsiento(fila, columna);
+    if (asiento == nullptr) {
         QMessageBox::warning(this, "Reserva no encontrada", "No existe una reserva en esa posicion.");
+    } else if (asiento->cliente != cliente.toStdString()) {
+        QMessageBox::warning(this, "Cliente incorrecto", "La reserva pertenece a otro cliente.");
+    } else if (matriz->eliminarAsiento(fila, columna)) {
+        QMessageBox::information(this, "Reserva cancelada", "El asiento fue liberado correctamente.");
     }
 }
 
@@ -464,9 +534,48 @@ void MainWindow::on_btnConsultarPromociones_clicked() {
         QMessageBox::information(this, "Promociones", "No hay promociones registradas.");
         return;
     }
-    GeneradorDot generador;
-    generador.graficarListaListas(listaPromociones, "promociones_cliente.png");
-    abrirReporte(this, "promociones_cliente.png");
+
+    QDate hoy = QDate::currentDate();
+    QStringList nombresDias;
+    nombresDias << "lunes" << "martes" << "miércoles" << "jueves"
+                << "viernes" << "sábado" << "domingo";
+    QString diaActual = nombresDias.value(hoy.dayOfWeek() - 1);
+    QString resultado;
+    NodoListaListas* actual = listaPromociones->getPrimero();
+    do {
+        QDate inicio = QDate::fromString(QString::fromStdString(actual->promocion.fechaInicio), "yyyy-MM-dd");
+        QDate fin = QDate::fromString(QString::fromStdString(actual->promocion.fechaFin), "yyyy-MM-dd");
+        QString dias = QString::fromStdString(actual->promocion.diasAplicables).toLower();
+        bool fechaValida = inicio.isValid() && fin.isValid();
+        bool dentroVigencia = fechaValida && hoy >= inicio && hoy <= fin;
+        bool aplicaHoy = dias.isEmpty() || dias.contains(diaActual, Qt::CaseInsensitive);
+
+        if (dentroVigencia && aplicaHoy) {
+            resultado += "Promoción " + QString::number(actual->promocion.id)
+                + "\n" + QString::fromStdString(actual->promocion.descripcion)
+                + "\nVigencia: " + QString::fromStdString(actual->promocion.fechaInicio)
+                + " a " + QString::fromStdString(actual->promocion.fechaFin)
+                + "\nDías: " + QString::fromStdString(actual->promocion.diasAplicables)
+                + "\nBeneficios:\n";
+
+            NodoBeneficio* beneficio = actual->listaBeneficios;
+            if (beneficio == nullptr) {
+                resultado += "  Sin beneficios registrados\n";
+            } else {
+                while (beneficio != nullptr) {
+                    resultado += "  - " + QString::fromStdString(beneficio->tipo)
+                        + ": " + QString::fromStdString(beneficio->beneficio)
+                        + " (" + QString::fromStdString(beneficio->valor) + ")\n";
+                    beneficio = beneficio->siguiente;
+                }
+            }
+            resultado += "\n";
+        }
+        actual = actual->siguiente;
+    } while (actual != listaPromociones->getPrimero());
+
+    QMessageBox::information(this, "Promociones activas",
+        resultado.isEmpty() ? "No hay promociones activas para hoy." : resultado);
 }
 
 // --- VISTA CLIENTE: REALIZAR SOLICITUD ESPECIAL ---

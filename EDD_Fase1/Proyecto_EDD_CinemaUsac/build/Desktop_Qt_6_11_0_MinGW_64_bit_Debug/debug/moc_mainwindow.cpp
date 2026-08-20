@@ -52,6 +52,7 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "on_btnGestionarPromociones_clicked",
         "on_btnGestionarSolicitudes_clicked",
         "on_btnVerCarteleraCliente_clicked",
+        "on_btnBuscarPeliculaCliente_clicked",
         "on_btnReservarAsiento_clicked",
         "on_btnCancelarReserva_clicked",
         "on_btnConsultarPromociones_clicked",
@@ -84,16 +85,18 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_btnVerCarteleraCliente_clicked'
         QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_btnReservarAsiento_clicked'
+        // Slot 'on_btnBuscarPeliculaCliente_clicked'
         QtMocHelpers::SlotData<void()>(14, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_btnCancelarReserva_clicked'
+        // Slot 'on_btnReservarAsiento_clicked'
         QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_btnConsultarPromociones_clicked'
+        // Slot 'on_btnCancelarReserva_clicked'
         QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_btnRealizarSolicitud_clicked'
+        // Slot 'on_btnConsultarPromociones_clicked'
         QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_btnConsultarSolicitud_clicked'
+        // Slot 'on_btnRealizarSolicitud_clicked'
         QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_btnConsultarSolicitud_clicked'
+        QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -129,11 +132,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 9: _t->on_btnGestionarPromociones_clicked(); break;
         case 10: _t->on_btnGestionarSolicitudes_clicked(); break;
         case 11: _t->on_btnVerCarteleraCliente_clicked(); break;
-        case 12: _t->on_btnReservarAsiento_clicked(); break;
-        case 13: _t->on_btnCancelarReserva_clicked(); break;
-        case 14: _t->on_btnConsultarPromociones_clicked(); break;
-        case 15: _t->on_btnRealizarSolicitud_clicked(); break;
-        case 16: _t->on_btnConsultarSolicitud_clicked(); break;
+        case 12: _t->on_btnBuscarPeliculaCliente_clicked(); break;
+        case 13: _t->on_btnReservarAsiento_clicked(); break;
+        case 14: _t->on_btnCancelarReserva_clicked(); break;
+        case 15: _t->on_btnConsultarPromociones_clicked(); break;
+        case 16: _t->on_btnRealizarSolicitud_clicked(); break;
+        case 17: _t->on_btnConsultarSolicitud_clicked(); break;
         default: ;
         }
     }
@@ -159,14 +163,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 18;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 18)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 17;
+        _id -= 18;
     }
     return _id;
 }

@@ -19,6 +19,15 @@ void MatrizAsientos::configurarFuncion(std::string peliculaFuncion, std::string 
     sala = salaFuncion;
 }
 
+void MatrizAsientos::eliminarFuncion() {
+    raiz = new NodoMatriz(0, 0, "Raiz");
+    filas = 0;
+    columnas = 0;
+    pelicula.clear();
+    horario.clear();
+    sala.clear();
+}
+
 NodoMatriz* MatrizAsientos::buscarFila(int fila) {
     NodoMatriz* actual = raiz->abajo;
     while (actual != nullptr) {
