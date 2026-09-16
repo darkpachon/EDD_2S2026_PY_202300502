@@ -1,0 +1,33 @@
+digraph G {
+node [shape=box, style="filled,rounded", fontname="Arial"];
+edge [color=black];
+Nodo47 [style="filled,rounded", fillcolor="#86efac", label="P047\nAvatar\n162 min\nB15"];
+Nodo47 -> Nodo6;
+Nodo6 [style="filled,rounded", fillcolor="#86efac", label="P006\nTitanic\n195 min\nC"];
+Nodo6 -> Nodo2;
+Nodo2 [style="filled,rounded", fillcolor="#fde047", label="P002\nMonstersInc\n92 min\nA"];
+Nodo6 -> Nodo33;
+Nodo33 [style="filled,rounded", fillcolor="#86efac", label="P033\nvengadores\n143 min\nB15"];
+Nodo33 -> Nodo25;
+Nodo25 [style="filled,rounded", fillcolor="#86efac", label="P025\nInside Out\n95 min\nA"];
+Nodo25 -> Nodo9;
+Nodo9 [style="filled,rounded", fillcolor="#86efac", label="P009\nCoco\n105 min\nA"];
+Nodo9 -> Nodo14;
+Nodo14 [style="filled,rounded", fillcolor="#86efac", label="P014\nespiderman\n115 min\nB15"];
+Nodo33 -> Nodo41;
+Nodo41 [style="filled,rounded", fillcolor="#fde047", label="P041\nbackrooms\n134 min\nB15"];
+Nodo41 -> Nodo36;
+Nodo36 [style="filled,rounded", fillcolor="#86efac", label="P036\nsinsajo\n142 min\nB15"];
+Nodo47 -> Nodo79;
+Nodo79 [style="filled,rounded", fillcolor="#fde047", label="P079\nUp\n96 min\nA"];
+Nodo79 -> Nodo72;
+Nodo72 [style="filled,rounded", fillcolor="#86efac", label="P072\npuro mula\n178 min\nB15"];
+Nodo72 -> Nodo58;
+Nodo58 [style="filled,rounded", fillcolor="#86efac", label="P058\nlanters\n115 min\nA"];
+Nodo72 -> Nodo75;
+Nodo75 [style="filled,rounded", fillcolor="#86efac", label="P075\nIron Man\n126 min\nB15"];
+Nodo79 -> Nodo90;
+Nodo90 [style="filled,rounded", fillcolor="#86efac", label="P090\nfinal\n120 min\nC"];
+Nodo90 -> Nodo123;
+Nodo123 [style="filled,rounded", fillcolor="#d1d5db", label="p123\ncalificacion\n123 min\nb"];
+}

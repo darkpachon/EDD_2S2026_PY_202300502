@@ -1,0 +1,45 @@
+{
+  "clientes": [
+    {
+      "id": "u001",
+      "nombre": "Juanito Alimaina",
+      "correo": "juanito@gmail.com",
+      "telefono": "55551234",
+      "password": "juanito123",
+      "tipo": "cliente",
+      "reservas": [
+        {
+          "codigo_reserva": "R001",
+          "codigo_funcion": "F001",
+          "fila": 2,
+          "columna": 5,
+          "fecha_reserva": "2026-03-01"
+        },
+        {
+          "codigo_reserva": "R002",
+          "codigo_funcion": "F001",
+          "fila": 3,
+          "columna": 7,
+          "fecha_reserva": "2026-03-02"
+        }
+      ]
+    },
+    {
+      "id": "u002",
+      "nombre": "María López",
+      "correo": "maria@example.com",
+      "telefono": "55559876",
+      "password": "maria123",
+      "tipo": "cliente",
+      "reservas": [
+        {
+          "codigo_reserva": "R003",
+          "codigo_funcion": "F002",
+          "fila": 5,
+          "columna": 10,
+          "fecha_reserva": "2026-03-05"
+        }
+      ]
+    }
+  ]
+}

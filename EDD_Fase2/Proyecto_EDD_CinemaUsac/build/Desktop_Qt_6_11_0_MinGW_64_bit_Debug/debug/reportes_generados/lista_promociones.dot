@@ -1,0 +1,17 @@
+digraph G {
+rankdir=LR;
+node [shape=box, style=filled, fontname="Arial"];
+{ rank=same; Promo_1; Promo_2; Promo_3; }
+Promo_1 [shape=box, style="filled,rounded", fillcolor="#e0f2fe", label="Código: 1\nNombre: 3x2\nVigencia: 2027-09-13 a 2027-10-13"];
+Promo_1 -> Promo_2 [color=darkgreen, penwidth=2, constraint=false];
+Null_1 [shape=box, style=filled, fillcolor="#fef9c3", label="null"];
+Promo_1 -> Null_1 [dir=both, color=darkblue];
+Promo_2 [shape=box, style="filled,rounded", fillcolor="#e0f2fe", label="Código: 2\nNombre: 4x3\nVigencia: 2027-10-14 a 2027-11-13"];
+Promo_2 -> Promo_3 [color=darkgreen, penwidth=2, constraint=false];
+Null_2 [shape=box, style=filled, fillcolor="#fef9c3", label="null"];
+Promo_2 -> Null_2 [dir=both, color=darkblue];
+Promo_3 [shape=box, style="filled,rounded", fillcolor="#e0f2fe", label="Código: 3\nNombre: 3x5\nVigencia: 2027-09-16 a 2027-12-01"];
+Promo_3 -> Promo_1 [color=darkgreen, penwidth=2, constraint=false];
+Null_3 [shape=box, style=filled, fillcolor="#fef9c3", label="null"];
+Promo_3 -> Null_3 [dir=both, color=darkblue];
+}

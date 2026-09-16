@@ -1,0 +1,12 @@
+digraph G {
+rankdir=LR;
+node [shape=ellipse, style=filled, fillcolor=lightyellow, fontname="Arial"];
+Nodo0 [shape=ellipse, label="Solicitud: 1\nCliente: mmm\nTipo: sillas\nPrioridad: Normal\nEstado: Pendiente"];
+Nodo1 [shape=ellipse, label="Solicitud: 2\nCliente: iii\nTipo: sillas\nPrioridad: Normal\nEstado: Pendiente"];
+Nodo2 [shape=ellipse, label="Solicitud: 3\nCliente: ppp\nTipo: menos\nPrioridad: Normal\nEstado: Pendiente"];
+Nodo0 -> Nodo1 [dir=both, color=darkblue];
+Nodo1 -> Nodo2 [dir=both, color=darkblue];
+Nodo2 -> Nodo0 [dir=both, color=darkblue];
+label="Solicitudes pendientes: 3";
+labelloc=t;
+}
