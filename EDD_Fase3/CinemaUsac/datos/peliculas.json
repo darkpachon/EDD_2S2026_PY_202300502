@@ -1,0 +1,40 @@
+{
+  "sedes": [
+    { "codigo": "s001", "nombre": "CinemaUSAC Zona 10", "direccion": "Zona 10, Ciudad de Guatemala", "cantidad_salas": 3, "telefono": "11223344" },
+    { "codigo": "s002", "nombre": "CinemaUSAC Zona 4",  "direccion": "Zona 4, Ciudad de Guatemala",  "cantidad_salas": 5, "telefono": "11223344" },
+    { "codigo": "s003", "nombre": "CinemaUSAC Zona 1",  "direccion": "Zona 1, Ciudad de Guatemala",  "cantidad_salas": 4, "telefono": "22334455" },
+    { "codigo": "s004", "nombre": "CinemaUSAC Zona 12", "direccion": "Zona 12, Ciudad de Guatemala", "cantidad_salas": 6, "telefono": "33445566" },
+    { "codigo": "s005", "nombre": "CinemaUSAC Zona 7",  "direccion": "Zona 7, Ciudad de Guatemala",  "cantidad_salas": 2, "telefono": "44556677" }
+  ],
+  "peliculas": [
+    {
+      "codigo": "P001", "titulo": "Batman", "genero": "Accion", "duracion": 152,
+      "clasificacion": "B15", "idioma": "Subtitulada",
+      "fecha_estreno": "2026-02-01", "fecha_fin": "2026-05-01",
+      "funciones": [
+        { "codigo_funcion": "F001", "fecha": "2026-02-15", "horario": "17:00", "sede": "s001", "sala": "Sala 2", "filas": 10, "columnas": 20, "archivo_asientos": "" },
+        { "codigo_funcion": "F002", "fecha": "2026-02-15", "horario": "20:00", "sede": "s002", "sala": "Sala 1", "filas": 10, "columnas": 20, "archivo_asientos": "" }
+      ]
+    },
+    {
+      "codigo": "P002", "titulo": "Titanic", "genero": "Drama", "duracion": 195,
+      "clasificacion": "C", "idioma": "Subtitulada",
+      "fecha_estreno": "2026-02-01", "fecha_fin": "2026-05-01",
+      "funciones": [
+        { "codigo_funcion": "F003", "fecha": "2026-02-16", "horario": "18:00", "sede": "s001", "sala": "Sala 1", "filas": 8, "columnas": 15, "archivo_asientos": "" },
+        { "codigo_funcion": "F004", "fecha": "2026-02-16", "horario": "21:00", "sede": "s002", "sala": "Sala 3", "filas": 8, "columnas": 15, "archivo_asientos": "" },
+        { "codigo_funcion": "F005", "fecha": "2026-02-17", "horario": "19:00", "sede": "s003", "sala": "Sala 1", "filas": 8, "columnas": 15, "archivo_asientos": "" }
+      ]
+    },
+    {
+      "codigo": "P003", "titulo": "Matrix", "genero": "SciFi", "duracion": 136,
+      "clasificacion": "C", "idioma": "Subtitulada",
+      "fecha_estreno": "2026-02-01", "fecha_fin": "2026-05-01",
+      "funciones": [
+        { "codigo_funcion": "F006", "fecha": "2026-02-18", "horario": "16:00", "sede": "s002", "sala": "Sala 2", "filas": 10, "columnas": 20, "archivo_asientos": "" },
+        { "codigo_funcion": "F007", "fecha": "2026-02-18", "horario": "19:00", "sede": "s003", "sala": "Sala 2", "filas": 10, "columnas": 20, "archivo_asientos": "" },
+        { "codigo_funcion": "F008", "fecha": "2026-02-19", "horario": "20:00", "sede": "s004", "sala": "Sala 1", "filas": 10, "columnas": 20, "archivo_asientos": "" }
+      ]
+    }
+  ]
+}
